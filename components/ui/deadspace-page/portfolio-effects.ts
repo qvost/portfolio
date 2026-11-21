@@ -1,14 +1,20 @@
 import gsap from "gsap";
 import type Lenis from "lenis";
 import { profile } from "./portfolio-data";
-import { createVisibleRenderLoop } from "./render-loop";
+import { createVisibleRenderLoop, getSceneBufferSize } from "./render-loop";
 
 export function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
+const SOUND_STORAGE_KEY = "qvost-sound";
+let cachedSoundEnabled: boolean | undefined;
+
 function soundEnabled() {
-  try { return localStorage.getItem("qvost-sound") === "on"; } catch { return false; }
+  if (cachedSoundEnabled !== undefined) return cachedSoundEnabled;
+  try { cachedSoundEnabled = localStorage.getItem(SOUND_STORAGE_KEY) === "on"; }
+  catch { cachedSoundEnabled = false; }
+  return cachedSoundEnabled;
 }
 
 export function playInterfaceSound(url: string) {
@@ -32,21 +38,45 @@ function initCursor(root: HTMLElement) {
   let ty = 0;
   let previous = 0;
   let visible = false;
+  let displayed = false;
+  let link = false;
+  let renderedLink = false;
+  let pointX = Number.NaN;
+  let pointY = Number.NaN;
 
   function hide() {
     visible = false;
-    root.classList.remove("cursor-active");
+    if (displayed) root.classList.remove("cursor-active");
+    displayed = false;
+    link = false;
+    renderedLink = false;
+    pointX = Number.NaN;
+    pointY = Number.NaN;
+    previous = 0;
     cursor?.classList.remove("is-pressed", "is-link");
     window.cancelAnimationFrame(frame);
     frame = 0;
   }
   function render(time: number) {
+    if (!displayed) {
+      root.classList.add("cursor-active");
+      displayed = true;
+    }
     const delta = previous ? Math.min(time - previous, 40) : 16;
     previous = time;
     const blend = 1 - Math.exp(-delta / 52);
     x += (tx - x) * blend;
     y += (ty - y) * blend;
     if (cursor) cursor.style.transform = `translate3d(${x - 14}px, ${y - 14}px, 0)`;
+    if (pointX !== tx || pointY !== ty) {
+      point?.style.setProperty("transform", `translate3d(${tx - 1.5}px, ${ty - 1.5}px, 0)`);
+      pointX = tx;
+      pointY = ty;
+    }
+    if (link !== renderedLink) {
+      cursor?.classList.toggle("is-link", link);
+      renderedLink = link;
+    }
     if (Math.hypot(tx - x, ty - y) > 0.12 && visible) frame = window.requestAnimationFrame(render);
     else { frame = 0; previous = 0; }
   }
@@ -55,12 +85,9 @@ function initCursor(root: HTMLElement) {
     tx = event.clientX; ty = event.clientY;
     if (!visible) {
       x = tx; y = ty;
-      cursor?.style.setProperty("transform", `translate3d(${x - 14}px, ${y - 14}px, 0)`);
       visible = true;
-      root.classList.add("cursor-active");
     }
-    point?.style.setProperty("transform", `translate3d(${tx - 1.5}px, ${ty - 1.5}px, 0)`);
-    cursor?.classList.toggle("is-link", !!event.target.closest("a, button, [role=button], .joystick"));
+    link = !!event.target.closest("a, button, [role=button], .joystick");
     if (!frame) frame = window.requestAnimationFrame(render);
   }
   window.addEventListener("pointermove", move, { signal, passive: true });
@@ -92,19 +119,22 @@ export function initPortfolioControls(root: HTMLElement, lenis: Lenis) {
   let copyTimer = 0;
   let active = true;
   let menuOpen = false;
+  let backTopVisible: boolean | undefined;
+  let handsBounds: DOMRect | null = null;
   let returnFocus: HTMLElement | null = null;
   const background = Array.from(root.children).filter((element): element is HTMLElement => element instanceof HTMLElement && element !== overlay);
   const initialInert = background.map(element => element.inert);
 
   function refreshSound() {
-    if (!sound) return;
+    cachedSoundEnabled = undefined;
     const on = soundEnabled();
+    if (!sound) return;
     sound.innerHTML = `Sound ${on ? "on" : "off"} <span aria-hidden="true">${on ? "◉" : "◌"}</span>`;
     sound.setAttribute("aria-pressed", String(on));
     sound.setAttribute("aria-label", `${on ? "Disable" : "Enable"} interface sounds`);
   }
   function toggleSound() {
-    try { localStorage.setItem("qvost-sound", soundEnabled() ? "off" : "on"); } catch { /* Private storage keeps sound off. */ }
+    try { localStorage.setItem(SOUND_STORAGE_KEY, soundEnabled() ? "off" : "on"); } catch { /* Private storage keeps sound off. */ }
     refreshSound();
   }
   async function copyEmail() {
@@ -156,9 +186,13 @@ export function initPortfolioControls(root: HTMLElement, lenis: Lenis) {
     observer?.observe(overlay, { attributes: true, attributeFilter: ["data-open"] });
   }
   function onScroll() {
+    handsBounds = null;
     const visible = lenis.scroll > 500;
-    backTop?.classList.toggle("visible", visible);
-    backTop?.setAttribute("tabindex", visible ? "0" : "-1");
+    if (visible !== backTopVisible) {
+      backTopVisible = visible;
+      backTop?.classList.toggle("visible", visible);
+      backTop?.setAttribute("tabindex", visible ? "0" : "-1");
+    }
     if (symbol && !reduced) symbol.style.transform = `rotate(${lenis.scroll * 0.035}deg)`;
   }
   function anchorClick(event: MouseEvent) {
@@ -177,6 +211,12 @@ export function initPortfolioControls(root: HTMLElement, lenis: Lenis) {
     lenis.scrollTo(target, { immediate: reduced, duration: 0.85 });
   }
   refreshSound(); onScroll();
+  window.addEventListener("storage", (event) => {
+    if (event.key === SOUND_STORAGE_KEY || event.key === null) refreshSound();
+  }, { signal });
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) refreshSound();
+  }, { signal });
   sound?.addEventListener("click", toggleSound, { signal });
   copy?.addEventListener("click", copyEmail, { signal });
   root.addEventListener("keydown", keyboard, { signal });
@@ -185,23 +225,57 @@ export function initPortfolioControls(root: HTMLElement, lenis: Lenis) {
 
   const xTo = canvas && !reduced && finePointer ? gsap.quickTo(canvas, "x", { duration: 1.2, ease: "power3.out" }) : null;
   const yTo = canvas && !reduced && finePointer ? gsap.quickTo(canvas, "y", { duration: 1.2, ease: "power3.out" }) : null;
+  let canvasVisible = false;
+  let parallaxFrame = 0;
+  let parallaxX = 0;
+  let parallaxY = 0;
+  const canvasObserver = canvas && !reduced && finePointer ? new IntersectionObserver(entries => {
+    canvasVisible = entries[entries.length - 1]?.isIntersecting ?? false;
+  }) : null;
+  if (canvas) canvasObserver?.observe(canvas);
   function parallax(event: PointerEvent) {
-    if (menuOpen || !canvas || canvas.getBoundingClientRect().bottom < 0) return;
-    xTo?.((event.clientX / window.innerWidth - 0.5) * 14);
-    yTo?.((event.clientY / window.innerHeight - 0.5) * 8);
+    if (menuOpen || !canvasVisible || event.pointerType !== "mouse") return;
+    parallaxX = event.clientX;
+    parallaxY = event.clientY;
+    if (!parallaxFrame) parallaxFrame = window.requestAnimationFrame(() => {
+      parallaxFrame = 0;
+      if (!active || menuOpen || !canvasVisible) return;
+      xTo?.((parallaxX / window.innerWidth - 0.5) * 14);
+      yTo?.((parallaxY / window.innerHeight - 0.5) * 8);
+    });
   }
   if (canvas && !reduced && finePointer) window.addEventListener("pointermove", parallax, { signal, passive: true });
+  let handsFrame = 0;
+  let handsX = 0;
+  let handsY = 0;
   if (hands && !reduced && finePointer) {
+    window.addEventListener("resize", () => { handsBounds = null; }, { signal, passive: true });
     hands.addEventListener("pointermove", (event) => {
-      const bounds = hands.getBoundingClientRect();
-      hands.style.setProperty("--reach", `${((event.clientX - bounds.left) / bounds.width - 0.5) * 18}px`);
-      hands.style.setProperty("--lift", `${((event.clientY - bounds.top) / bounds.height - 0.5) * 8}px`);
+      handsX = event.clientX;
+      handsY = event.clientY;
+      if (!handsFrame) handsFrame = window.requestAnimationFrame(() => {
+        handsFrame = 0;
+        if (!active) return;
+        const bounds = handsBounds ??= hands.getBoundingClientRect();
+        if (!bounds.width || !bounds.height) return;
+        hands.style.setProperty("--reach", `${((handsX - bounds.left) / bounds.width - 0.5) * 18}px`);
+        hands.style.setProperty("--lift", `${((handsY - bounds.top) / bounds.height - 0.5) * 8}px`);
+      });
     }, { signal, passive: true });
-    hands.addEventListener("pointerleave", () => { hands.style.setProperty("--reach", "0px"); hands.style.setProperty("--lift", "0px"); }, { signal });
+    hands.addEventListener("pointerleave", () => {
+      window.cancelAnimationFrame(handsFrame);
+      handsFrame = 0;
+      handsBounds = null;
+      hands.style.setProperty("--reach", "0px");
+      hands.style.setProperty("--lift", "0px");
+    }, { signal });
   }
   return () => {
     active = false;
     controller.abort(); observer?.disconnect(); cleanupCursor();
+    canvasObserver?.disconnect();
+    window.cancelAnimationFrame(parallaxFrame);
+    window.cancelAnimationFrame(handsFrame);
     window.clearTimeout(copyTimer);
     lenis.off("scroll", onScroll);
     if (menuOpen) lenis.start();
@@ -226,8 +300,8 @@ export function initFallbackSkyline(root: HTMLElement) {
   });
   function resize() {
     if (!canvas) return;
-    const ratio = Math.min(window.devicePixelRatio, 1.25);
-    canvas.width = window.innerWidth * ratio; canvas.height = window.innerHeight * ratio;
+    const size = getSceneBufferSize({ width: window.innerWidth, height: window.innerHeight });
+    canvas.width = size.width; canvas.height = size.height;
     loop.request();
   }
   function render(time: number) {
@@ -252,7 +326,7 @@ export function initFallbackSkyline(root: HTMLElement) {
     });
     return !reduced;
   }
-  const loop = createVisibleRenderLoop({ element: canvas, draw: render });
+  const loop = createVisibleRenderLoop({ element: canvas, occludedBy: root.querySelector<HTMLElement>(".menu-overlay"), draw: render });
   resize(); window.addEventListener("resize", resize);
   return () => { loop.destroy(); window.removeEventListener("resize", resize); };
 }

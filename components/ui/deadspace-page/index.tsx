@@ -17,12 +17,11 @@ import {
 } from "react";
 
 import { type DeadspaceRoute, getDeadspaceFragment } from "./portfolio";
-import { matrixShader } from "./menu-shader";
 import { getDeadspacePageStyles } from "./styles";
 import portfolioStyles from "./portfolio.css?inline";
 import polishStyles from "./polish.css?inline";
 import { initPortfolioControls, initFallbackSkyline, playInterfaceSound, prefersReducedMotion } from "./portfolio-effects";
-import { createVisibleRenderLoop } from "./render-loop";
+import { createVisibleRenderLoop, getSceneBufferSize } from "./render-loop";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -163,15 +162,18 @@ export default function DeadspacePage({
     normalizePath(initialPath),
   );
   const { scroller, lenis } = useScrollRuntime(rootElement);
-  const css = useMemo(() => getDeadspacePageStyles(assetBase).replaceAll("font-style: normal;", "font-style: normal; font-display: swap;") + "\n" + portfolioStyles + "\n" + polishStyles, [assetBase]);
+  const css = useMemo(() => getDeadspacePageStyles(assetBase)
+    .replace(/^@import url\('https:\/\/fonts\.googleapis\.com\/[^']+'\);\s*/, "")
+    .replaceAll("font-style: normal;", "font-style: normal; font-display: swap;")
+    + "\n" + portfolioStyles + "\n" + polishStyles, [assetBase]);
   useEffect(() => {
     const pop = () => { setPathname(normalizePath(window.location.pathname)); if (lenis) lenis.scrollTo(0, { immediate: true, force: true }); else scrollToTop(scroller); };
     window.addEventListener("popstate", pop);
     return () => window.removeEventListener("popstate", pop);
   }, [scroller, lenis]);
   useEffect(() => {
-    document.title = `${pathname === "/" ? "Siddid Pandey" : pathname === "/work" ? "Work archive" : pathname === "/lab" ? "About / Lab" : pathname === "/project" ? "Reify" : "Contact"} / qvost`;
-  }, [pathname]);
+    document.title = "Qvost";
+  }, []);
 
   useEffect(() => {
     setPathname(normalizePath(initialPath));
@@ -318,15 +320,24 @@ function useDeadspaceEffects({
 
 let webGLAvailable: boolean | undefined;
 type ThreeEngine = Pick<typeof import("three"), "Scene" | "OrthographicCamera" | "WebGLRenderer" | "PlaneGeometry" | "ShaderMaterial" | "Vector2" | "Vector3" | "Mesh" | "PerspectiveCamera" | "Texture" | "GLSL3">;
-function initDeferredWebGL(start: (three: ThreeEngine) => () => void, fallback: () => () => void = () => () => {}) {
+function loadThreeEngine(): Promise<ThreeEngine> {
+  return import("three").then(({ Scene, OrthographicCamera, WebGLRenderer, PlaneGeometry, ShaderMaterial, Vector2, Vector3, Mesh, PerspectiveCamera, Texture, GLSL3 }) =>
+    ({ Scene, OrthographicCamera, WebGLRenderer, PlaneGeometry, ShaderMaterial, Vector2, Vector3, Mesh, PerspectiveCamera, Texture, GLSL3 }));
+}
+
+function initDeferredEffect<T>(ready: Promise<T>, start: (value: T) => () => void, fallback: () => () => void = () => () => {}) {
   let active = true;
   let cleanup = () => {};
-  void import("three").then(({ Scene, OrthographicCamera, WebGLRenderer, PlaneGeometry, ShaderMaterial, Vector2, Vector3, Mesh, PerspectiveCamera, Texture, GLSL3 }) => {
+  void ready.then((value) => {
     if (!active) return;
-    try { cleanup = start({ Scene, OrthographicCamera, WebGLRenderer, PlaneGeometry, ShaderMaterial, Vector2, Vector3, Mesh, PerspectiveCamera, Texture, GLSL3 }); }
+    try { cleanup = start(value); }
     catch { cleanup = fallback(); }
   }, () => { if (active) cleanup = fallback(); });
   return () => { active = false; cleanup(); };
+}
+
+function initDeferredWebGL(start: (three: ThreeEngine) => () => void, fallback: () => () => void = () => () => {}) {
+  return initDeferredEffect(loadThreeEngine(), start, fallback);
 }
 
 function initVisibleProjectEffect(root: HTMLElement, start: () => () => void) {
@@ -536,7 +547,10 @@ function initMenu(root: HTMLElement, asset: (path: string) => string) {
     overlay.dataset.open = String(next);
     if (next && !atmosphereStarted && !prefersReducedMotion() && canUseWebGL()) {
       atmosphereStarted = true;
-      cleanupAtmosphere = initDeferredWebGL(three => initMenuAtmosphere(root, three));
+      cleanupAtmosphere = initDeferredEffect(
+        Promise.all([loadThreeEngine(), import("./menu-shader")]),
+        ([three, { matrixShader }]) => initMenuAtmosphere(root, three, matrixShader),
+      );
     }
     const duration = prefersReducedMotion() ? 0 : 0.22;
     animation = gsap.timeline().to(overlay, { opacity: next ? 1 : 0, duration, ease: "power2.out" }, 0)
@@ -584,7 +598,7 @@ function initMenu(root: HTMLElement, asset: (path: string) => string) {
   };
 }
 
-function initMenuAtmosphere(root: HTMLElement, THREE: ThreeEngine) {
+function initMenuAtmosphere(root: HTMLElement, THREE: ThreeEngine, matrixShader: typeof import("./menu-shader").matrixShader) {
   const canvas = root.querySelector<HTMLCanvasElement>("#menu-canvas");
   if (!canvas || prefersReducedMotion() || !canUseWebGL()) return () => {};
 
@@ -595,7 +609,6 @@ function initMenuAtmosphere(root: HTMLElement, THREE: ThreeEngine) {
     antialias: false,
     alpha: false,
   });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   const geometry = new THREE.PlaneGeometry(2, 2);
   const material = new THREE.ShaderMaterial({
     vertexShader: matrixShader.vertexShader,
@@ -612,9 +625,8 @@ function initMenuAtmosphere(root: HTMLElement, THREE: ThreeEngine) {
   const overlay = canvas.closest<HTMLElement>(".menu-overlay");
 
   function resize() {
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-    renderer.setSize(width, height);
+    const { width, height } = getSceneBufferSize({ width: window.innerWidth, height: window.innerHeight });
+    renderer.setSize(width, height, false);
     material.uniforms.iResolution.value.set(width, height);
   }
 
@@ -812,18 +824,15 @@ function initSkyline(root: HTMLElement, THREE: ThreeEngine) {
   function resize() {
     window.clearTimeout(resizeTimer);
     resizeTimer = window.setTimeout(() => {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      renderer.setSize(width, height);
-      renderer.setPixelRatio(
-        Math.min(window.devicePixelRatio, pixelRatioLimit),
-      );
+      const { width, height } = getSceneBufferSize({ width: window.innerWidth, height: window.innerHeight, maxPixelRatio: pixelRatioLimit });
+      renderer.setSize(width, height, false);
       material.uniforms.iResolution.value.set(width, height, 1);
     }, 100);
   }
 
   const loop = createVisibleRenderLoop({
     element: canvas,
+    occludedBy: root.querySelector<HTMLElement>(".menu-overlay"),
     draw(time) {
       material.uniforms.iTime.value = time * 0.001;
       try { renderer.render(scene, camera); } catch { return false; }
@@ -1089,9 +1098,11 @@ function initImageDistortion(
   const imageEvents = new AbortController();
 
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  const buffer = getSceneBufferSize({ width: window.innerWidth, height: window.innerHeight });
+  renderer.setSize(buffer.width, buffer.height, false);
   renderer.domElement.className = "deadspace-webgl-layer";
+  renderer.domElement.style.width = "100%";
+  renderer.domElement.style.height = "100%";
   renderer.domElement.style.display = isMobile ? "none" : "block";
   rootElement.appendChild(renderer.domElement);
 
@@ -1253,7 +1264,8 @@ function initImageDistortion(
     camera.fov =
       (2 * Math.atan(window.innerHeight / 2 / cameraPosition) * 180) / Math.PI;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    const buffer = getSceneBufferSize({ width: window.innerWidth, height: window.innerHeight });
+    renderer.setSize(buffer.width, buffer.height, false);
 
     objects.forEach((object) => {
       const bounds = object.img.getBoundingClientRect();
@@ -1270,6 +1282,7 @@ function initImageDistortion(
 
   loop = createVisibleRenderLoop({
     element: root.querySelector<HTMLElement>(".project-images") || root,
+    occludedBy: root.querySelector<HTMLElement>(".menu-overlay"),
     draw: render,
     enabled: !isMobile,
   });
@@ -1315,11 +1328,11 @@ function initParticleVisual(
 
   const config = {
     canvasBg: "#e30613",
-    distortionRadius: 220 * Math.min(devicePixelRatio || 1, 2),
+    distortionRadius: 220,
     forceStrength: 0.035,
     logoPath: asset("lab/hero-visual.png"),
     logoSize: 900,
-    maxDisplacement: 100 * Math.min(devicePixelRatio || 1, 2),
+    maxDisplacement: 100,
     particleSpacing: window.innerWidth < 1000 ? 6 : 4,
     returnForce: 0.1,
   };
@@ -1346,11 +1359,18 @@ function initParticleVisual(
   let vShader: WebGLShader | null = null;
   let fShader: WebGLShader | null = null;
   let execCount = 0;
+  let pixelRatio = 1;
+  let pointerX = 0;
+  let pointerY = 0;
+  let pointerDirty = false;
+  let resolutionUniform: WebGLUniformLocation | null = null;
+  let pointSizeUniform: WebGLUniformLocation | null = null;
 
   function sizeCanvas() {
-    const dpr = Math.min(devicePixelRatio || 1, 2);
-    canvas.width = innerWidth * dpr;
-    canvas.height = innerHeight * dpr;
+    const size = getSceneBufferSize({ width: innerWidth, height: innerHeight });
+    canvas.width = size.width;
+    canvas.height = size.height;
+    pixelRatio = canvas.width / innerWidth;
     canvas.style.width = `${innerWidth}px`;
     canvas.style.height = `${innerHeight}px`;
   }
@@ -1359,6 +1379,7 @@ function initParticleVisual(
     const vs = `
       precision mediump float;
       uniform vec2 u_resolution;
+      uniform float u_pointSize;
       attribute vec2 a_position;
       attribute vec4 a_color;
       varying vec4 v_color;
@@ -1366,7 +1387,7 @@ function initParticleVisual(
         vec2 clip = (a_position / u_resolution * 2.0 - 1.0) * vec2(1.0, -1.0);
         v_color = a_color;
         gl_Position = vec4(clip, 0.0, 1.0);
-        gl_PointSize = 3.0;
+        gl_PointSize = u_pointSize;
       }`;
 
     const fs = `
@@ -1395,12 +1416,14 @@ function initParticleVisual(
     gl.bindAttribLocation(state.program, 0, "a_position");
     gl.bindAttribLocation(state.program, 1, "a_color");
     gl.linkProgram(state.program);
+    resolutionUniform = gl.getUniformLocation(state.program, "u_resolution");
+    pointSizeUniform = gl.getUniformLocation(state.program, "u_pointSize");
   }
 
   function createParticles(pixels: Uint8ClampedArray) {
     const cx = canvas.width / 2;
     const cy = canvas.height / 2;
-    const scale = Math.min(innerWidth / 1100, 1) * Math.min(devicePixelRatio || 1, 2);
+    const scale = Math.min(innerWidth / 1100, 1) * pixelRatio;
     const dim = config.logoSize;
     const spacing = config.particleSpacing;
     const pos: number[] = [];
@@ -1477,10 +1500,11 @@ function initParticleVisual(
     gl.useProgram(state.program);
 
     gl.uniform2f(
-      gl.getUniformLocation(state.program, "u_resolution"),
+      resolutionUniform,
       canvas.width,
       canvas.height,
     );
+    gl.uniform1f(pointSizeUniform, 3 * pixelRatio / Math.min(devicePixelRatio || 1, 2));
 
     gl.bindBuffer(gl.ARRAY_BUFFER, state.geometry.posBuf);
     gl.enableVertexAttribArray(0);
@@ -1495,10 +1519,20 @@ function initParticleVisual(
 
   function animate() {
     if (!state.geometry || !state.posArray) return false;
+    if (pointerDirty) {
+      const rect = canvas.getBoundingClientRect();
+      state.mouse.x = (pointerX - rect.left) * pixelRatio;
+      state.mouse.y = (pointerY - rect.top) * pixelRatio;
+      pointerDirty = false;
+    }
 
     if (!state.isMobile && execCount > 0) {
       execCount--;
-      const rad = config.distortionRadius ** 2;
+      const rad = (config.distortionRadius * pixelRatio) ** 2;
+      const maxDisplacement = config.maxDisplacement * pixelRatio;
+      const motionScale = pixelRatio / Math.min(devicePixelRatio || 1, 2);
+      const forceStrength = config.forceStrength * motionScale;
+      const edgeFalloff = 0.02 / motionScale;
       let needsUpdate = false;
 
       for (let i = 0; i < state.particles.length; i++) {
@@ -1514,12 +1548,11 @@ function initParticleVisual(
           const distOrig = Math.sqrt((x - p.ox) ** 2 + (y - p.oy) ** 2);
           const mult = Math.max(
             0.1,
-            1 - distOrig / (config.maxDisplacement * 2),
+            1 - distOrig / (maxDisplacement * 2),
           );
-          p.vx +=
-            f * Math.cos(Math.atan2(dy, dx)) * config.forceStrength * mult;
-          p.vy +=
-            f * Math.sin(Math.atan2(dy, dx)) * config.forceStrength * mult;
+          const force = f * forceStrength * mult / Math.sqrt(dis);
+          p.vx += dx * force;
+          p.vy += dy * force;
           needsUpdate = true;
         }
 
@@ -1530,11 +1563,11 @@ function initParticleVisual(
           const doy = ny - p.oy;
           const distOrig = Math.sqrt(dox * dox + doy * doy);
 
-          if (distOrig > config.maxDisplacement) {
-            const s = config.maxDisplacement / distOrig;
+          if (distOrig > maxDisplacement) {
+            const s = maxDisplacement / distOrig;
             const ds =
               s +
-              (1 - s) * Math.exp(-(distOrig - config.maxDisplacement) * 0.02);
+              (1 - s) * Math.exp(-(distOrig - maxDisplacement) * edgeFalloff);
             state.posArray[i * 2] = p.ox + dox * ds;
             state.posArray[i * 2 + 1] = p.oy + doy * ds;
             p.vx *= 0.7;
@@ -1559,10 +1592,9 @@ function initParticleVisual(
 
   function handleMouseMove(event: MouseEvent) {
     if (state.isMobile) return;
-    const rect = canvas.getBoundingClientRect();
-    const dpr = Math.min(devicePixelRatio || 1, 2);
-    state.mouse.x = (event.clientX - rect.left) * dpr;
-    state.mouse.y = (event.clientY - rect.top) * dpr;
+    pointerX = event.clientX;
+    pointerY = event.clientY;
+    pointerDirty = true;
     execCount = 90;
     loop.request();
   }
@@ -1574,7 +1606,7 @@ function initParticleVisual(
 
     const cx = canvas.width / 2;
     const cy = canvas.height / 2;
-    const scale = Math.min(innerWidth / 1100, 1) * Math.min(devicePixelRatio || 1, 2);
+    const scale = Math.min(innerWidth / 1100, 1) * pixelRatio;
     const dim = config.logoSize;
 
     for (let i = 0; i < state.particles.length; i++) {
@@ -1593,7 +1625,7 @@ function initParticleVisual(
     loop.request();
   }
 
-  const loop = createVisibleRenderLoop({ element: canvas, draw: animate });
+  const loop = createVisibleRenderLoop({ element: canvas, occludedBy: root.querySelector<HTMLElement>(".menu-overlay"), draw: animate });
   sizeCanvas();
   gl.enable(gl.BLEND);
   gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
