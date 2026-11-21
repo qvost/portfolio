@@ -1,8 +1,8 @@
 export function getDeadspacePageStyles(assetBase: string) {
-  return (SOURCE_STYLES + STRUCTURAL_STYLES).replaceAll(
-    "__ASSET_BASE__",
-    assetBase.replace(/\/$/, ""),
-  );
+  return (SOURCE_STYLES + STRUCTURAL_STYLES)
+    .replaceAll("__ASSET_BASE__", assetBase.replace(/\/$/, ""))
+    .replace(/^@import url\('https:\/\/fonts\.googleapis\.com\/[^']+'\);\s*/, "")
+    .replaceAll("font-style: normal;", "font-style: normal; font-display: swap;");
 }
 
 const STRUCTURAL_STYLES =

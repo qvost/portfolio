@@ -1,14 +1,19 @@
 import { defineConfig, loadEnv } from "vite";
+import { defaultAssetBase } from "./components/ui/deadspace-page/page-metadata";
+import { portfolioPages } from "./scripts/portfolio-pages";
 
 export default defineConfig(({ mode }) => {
   const assetBase = loadEnv(mode, process.cwd(), "VITE_").VITE_ASSET_BASE?.replace(/\/$/, "");
   return {
-    plugins: [{
-      name: "deadspace-asset-base",
-      transformIndexHtml(html) {
-        return assetBase ? html.replaceAll("https://ui.aryank.space/assets/deadspace-page", assetBase) : html;
+    plugins: [
+      {
+        name: "deadspace-asset-base",
+        transformIndexHtml(html) {
+          return assetBase ? html.replaceAll(defaultAssetBase, assetBase) : html;
+        },
       },
-    }],
+      portfolioPages(assetBase || defaultAssetBase),
+    ],
     build: {
       rollupOptions: {
         output: {

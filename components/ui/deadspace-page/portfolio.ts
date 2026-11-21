@@ -67,8 +67,8 @@ function setHTML(root: ParentNode, selector: string, html: string) {
   if (element) element.innerHTML = html;
 }
 
-export function getDeadspaceFragment(route: DeadspaceRoute, assetBase: string) {
-  const template = document.createElement("template");
+export function getDeadspaceFragment(route: DeadspaceRoute, assetBase: string, ownerDocument = document) {
+  const template = ownerDocument.createElement("template");
   template.innerHTML = DEADSPACE_ROUTE_FRAGMENTS[route].replaceAll("__ASSET_BASE__", assetBase.replace(/\/$/, ""));
   const root = template.content;
   setHTML(root, ".nav-location p", '<span class="location-dot" aria-hidden="true"></span> Kathmandu, NP');

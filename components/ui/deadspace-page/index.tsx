@@ -20,6 +20,7 @@ import {
 } from "react";
 
 import { type DeadspaceRoute, getDeadspaceFragment } from "./portfolio";
+import { defaultAssetBase, isPortfolioRoute, pageMetadata } from "./page-metadata";
 import { getDeadspacePageStyles } from "./styles";
 import portfolioStyles from "./portfolio.css?inline";
 import polishStyles from "./polish.css?inline";
@@ -32,11 +33,7 @@ const HalftoneInterfaceHero = lazy(() => import("../halftone-interface-hero"));
 const HERO_HEADLINE: [string, string] = ["QVOST", ""];
 const HERO_ACCENTS: [string, string, string] = ["#6c0610", "#ff573b", "#f4b7a6"];
 
-export const DEFAULT_ASSET_BASE =
-  "https://ui.aryank.space/assets/deadspace-page";
-
-const ROUTES: DeadspaceRoute[] = ["/", "/work", "/project", "/lab", "/contact"];
-const ROUTE_SET = new Set(ROUTES);
+export const DEFAULT_ASSET_BASE = defaultAssetBase;
 
 function normalizePath(path: string): DeadspaceRoute {
   const normalized =
@@ -45,9 +42,7 @@ function normalizePath(path: string): DeadspaceRoute {
       .split("#")[0]
       .replace(/\.html$/, "")
       .replace(/\/$/, "") || "/";
-  return ROUTE_SET.has(normalized as DeadspaceRoute)
-    ? (normalized as DeadspaceRoute)
-    : "/";
+  return isPortfolioRoute(normalized) ? normalized : "/";
 }
 
 function getScrollParent(node: HTMLElement | null): HTMLElement | Window {
@@ -170,8 +165,6 @@ export default function DeadspacePage({
   );
   const { scroller, lenis } = useScrollRuntime(rootElement);
   const css = useMemo(() => getDeadspacePageStyles(assetBase)
-    .replace(/^@import url\('https:\/\/fonts\.googleapis\.com\/[^']+'\);\s*/, "")
-    .replaceAll("font-style: normal;", "font-style: normal; font-display: swap;")
     + "\n" + portfolioStyles + "\n" + polishStyles, [assetBase]);
   useEffect(() => {
     const pop = () => { setPathname(normalizePath(window.location.pathname)); if (lenis) lenis.scrollTo(0, { immediate: true, force: true }); else scrollToTop(scroller); };
@@ -179,8 +172,8 @@ export default function DeadspacePage({
     return () => window.removeEventListener("popstate", pop);
   }, [scroller, lenis]);
   useEffect(() => {
-    document.title = "Qvost";
-  }, []);
+    document.title = pageMetadata[pathname].title;
+  }, [pathname]);
 
   useEffect(() => {
     setPathname(normalizePath(initialPath));

@@ -3,3 +3,5 @@ dist/
 .DS_Store
 artifacts/
 public/vendor/three/
+.vercel/
+.env.local
