@@ -33,7 +33,7 @@ function homeSections() {
         <div>
           <h2 data-animate-variant="slide" data-animate-type="lines">I'm Siddid.<br />I build.</h2>
           <p class="about-statement" data-animate-variant="slide" data-animate-type="lines">I build tools for repeatable program execution and for agents that use the web.</p>
-          <div class="about-detail"><p><a class="inline-link" href="${profile.lab.url}"${external(profile.lab.url)}>Shaligram Labs</a><br />Independent research in Kathmandu.</p><p>My current projects cover Linux execution, vector search, and typed interfaces for agents.</p></div>
+          <div class="about-detail"><p><a class="inline-link" href="${profile.lab.url}"${external(profile.lab.url)}>Shaligram Labs</a><br />Independent research in Kathmandu.</p><p>I've written three research papers on Reify, Statis, and Strata.</p></div>
           <a href="/lab" class="outline-link">About the lab</a>
         </div>
       </div>
@@ -109,7 +109,7 @@ export function getDeadspaceFragment(route: DeadspaceRoute, assetBase: string) {
     setText(root, ".hero > p", "Siddid Pandey / Software & systems");
     const hero = root.querySelector(".hero");
     root.querySelector(".hero-footer")?.insertAdjacentHTML("beforebegin", '<div class="hero-actions"><a href="#selected-work" class="hero-cta">View my work</a><a href="#about" class="hero-scroll mono">About me</a></div><div class="hero-side mono" aria-hidden="true">Execution / Search / Agents</div>');
-    setText(root, ".hero-footer p:first-child", "Independent research / Kathmandu");
+    setText(root, ".hero-footer p:first-child", "3 research papers / Kathmandu");
     setText(root, ".hero-footer p:last-child", "Statis · Strata · Reify");
     hero?.insertAdjacentHTML("afterend", homeSections());
   }
