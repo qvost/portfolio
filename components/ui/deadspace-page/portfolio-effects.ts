@@ -1,7 +1,5 @@
-import gsap from "gsap";
 import type Lenis from "lenis";
 import { profile } from "./portfolio-data";
-import { createVisibleRenderLoop, getSceneBufferSize } from "./render-loop";
 
 export function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -110,7 +108,6 @@ export function initPortfolioControls(root: HTMLElement, lenis: Lenis) {
   const toggle = root.querySelector<HTMLElement>(".menu-toggle-btn");
   const close = root.querySelector<HTMLElement>(".close-btn");
   const overlay = root.querySelector<HTMLElement>(".menu-overlay");
-  const canvas = root.querySelector<HTMLCanvasElement>("#skyline");
   const symbol = root.querySelector<HTMLElement>(".about-symbol");
   const hands = root.querySelector<HTMLElement>(".halftone-hands");
   const reduced = prefersReducedMotion();
@@ -223,28 +220,6 @@ export function initPortfolioControls(root: HTMLElement, lenis: Lenis) {
   root.addEventListener("click", anchorClick, { signal });
   lenis.on("scroll", onScroll);
 
-  const xTo = canvas && !reduced && finePointer ? gsap.quickTo(canvas, "x", { duration: 1.2, ease: "power3.out" }) : null;
-  const yTo = canvas && !reduced && finePointer ? gsap.quickTo(canvas, "y", { duration: 1.2, ease: "power3.out" }) : null;
-  let canvasVisible = false;
-  let parallaxFrame = 0;
-  let parallaxX = 0;
-  let parallaxY = 0;
-  const canvasObserver = canvas && !reduced && finePointer ? new IntersectionObserver(entries => {
-    canvasVisible = entries[entries.length - 1]?.isIntersecting ?? false;
-  }) : null;
-  if (canvas) canvasObserver?.observe(canvas);
-  function parallax(event: PointerEvent) {
-    if (menuOpen || !canvasVisible || event.pointerType !== "mouse") return;
-    parallaxX = event.clientX;
-    parallaxY = event.clientY;
-    if (!parallaxFrame) parallaxFrame = window.requestAnimationFrame(() => {
-      parallaxFrame = 0;
-      if (!active || menuOpen || !canvasVisible) return;
-      xTo?.((parallaxX / window.innerWidth - 0.5) * 14);
-      yTo?.((parallaxY / window.innerHeight - 0.5) * 8);
-    });
-  }
-  if (canvas && !reduced && finePointer) window.addEventListener("pointermove", parallax, { signal, passive: true });
   let handsFrame = 0;
   let handsX = 0;
   let handsY = 0;
@@ -273,60 +248,10 @@ export function initPortfolioControls(root: HTMLElement, lenis: Lenis) {
   return () => {
     active = false;
     controller.abort(); observer?.disconnect(); cleanupCursor();
-    canvasObserver?.disconnect();
-    window.cancelAnimationFrame(parallaxFrame);
     window.cancelAnimationFrame(handsFrame);
     window.clearTimeout(copyTimer);
     lenis.off("scroll", onScroll);
     if (menuOpen) lenis.start();
     background.forEach((element, index) => { element.inert = initialInert[index] ?? false; });
-    xTo?.tween.kill(); yTo?.tween.kill();
   };
-}
-
-export function initFallbackSkyline(root: HTMLElement) {
-  const canvas = root.querySelector<HTMLCanvasElement>("#skyline");
-  const context = canvas?.getContext("2d");
-  if (!canvas || !context) return () => {};
-  const reduced = prefersReducedMotion();
-  const layers = Array.from({ length: 8 }, (_, layer) => {
-    let seed = 31713 + layer * 71;
-    const random = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
-    return Array.from({ length: 30 }, (_, index) => ({
-      x: index / 12, width: 0.04 + random() * 0.055,
-      height: 0.05 + random() * 0.2 + layer * 0.012,
-      offset: random() * 0.02,
-    }));
-  });
-  function resize() {
-    if (!canvas) return;
-    const size = getSceneBufferSize({ width: window.innerWidth, height: window.innerHeight });
-    canvas.width = size.width; canvas.height = size.height;
-    loop.request();
-  }
-  function render(time: number) {
-    if (!canvas || !context) return false;
-    const width = canvas.width; const height = canvas.height;
-    context.fillStyle = "#e30613"; context.fillRect(0, 0, width, height);
-    layers.forEach((buildings, layer) => {
-      const factor = (layer + 1) / 8;
-      context.fillStyle = `rgb(${Math.round(190 * (1 - factor))},${Math.round(4 * (1 - factor))},${Math.round(15 * (1 - factor))})`;
-      const shift = reduced ? 0 : ((time * 0.000008 * factor) % 1.2);
-      buildings.forEach(building => {
-        const x = (building.x - shift) * width;
-        const w = building.width * width;
-        const h = building.height * height;
-        const y = height * (0.85 + factor * 0.1) - h;
-        context.beginPath();
-        context.moveTo(x, height); context.lineTo(x, y + h * 0.15);
-        context.lineTo(x + w * 0.2, y + h * building.offset);
-        context.lineTo(x + w * 0.8, y); context.lineTo(x + w, y + h * 0.12);
-        context.lineTo(x + w, height); context.closePath(); context.fill();
-      });
-    });
-    return !reduced;
-  }
-  const loop = createVisibleRenderLoop({ element: canvas, occludedBy: root.querySelector<HTMLElement>(".menu-overlay"), draw: render });
-  resize(); window.addEventListener("resize", resize);
-  return () => { loop.destroy(); window.removeEventListener("resize", resize); };
 }

@@ -8,7 +8,10 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import Lenis from "lenis";
 import type { CSSProperties } from "react";
+import { createPortal } from "react-dom";
 import {
+  lazy,
+  Suspense,
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -20,10 +23,14 @@ import { type DeadspaceRoute, getDeadspaceFragment } from "./portfolio";
 import { getDeadspacePageStyles } from "./styles";
 import portfolioStyles from "./portfolio.css?inline";
 import polishStyles from "./polish.css?inline";
-import { initPortfolioControls, initFallbackSkyline, playInterfaceSound, prefersReducedMotion } from "./portfolio-effects";
+import { initPortfolioControls, playInterfaceSound, prefersReducedMotion } from "./portfolio-effects";
 import { createVisibleRenderLoop, getSceneBufferSize } from "./render-loop";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
+
+const HalftoneInterfaceHero = lazy(() => import("../halftone-interface-hero"));
+const HERO_HEADLINE: [string, string] = ["QVOST", ""];
+const HERO_ACCENTS: [string, string, string] = ["#6c0610", "#ff573b", "#f4b7a6"];
 
 export const DEFAULT_ASSET_BASE =
   "https://ui.aryank.space/assets/deadspace-page";
@@ -243,14 +250,38 @@ function DeadspaceRouteView({
     scroller,
   });
 
+  const heroHost = pathname === "/"
+    ? routeElement?.querySelector<HTMLElement>(".hero-halftone-slot")
+    : null;
+  const onHeroReady = useCallback((ready: boolean) => {
+    heroHost?.closest(".hero")?.classList.toggle("has-halftone", ready);
+  }, [heroHost]);
+
   return (
-    <main
-      id="top"
-      tabIndex={-1}
-      ref={setRouteElement}
-      className={`deadspace-route deadspace-route-${pathname === "/" ? "index" : pathname.slice(1)}`}
-      dangerouslySetInnerHTML={{ __html: html }}
-    />
+    <>
+      <main
+        id="top"
+        tabIndex={-1}
+        ref={setRouteElement}
+        className={`deadspace-route deadspace-route-${pathname === "/" ? "index" : pathname.slice(1)}`}
+        dangerouslySetInnerHTML={{ __html: html }}
+      />
+      {heroHost && createPortal(
+        <Suspense fallback={null}>
+          <HalftoneInterfaceHero
+            headline={HERO_HEADLINE}
+            accentColors={HERO_ACCENTS}
+            foreground="#080808"
+            background="transparent"
+            fontFamily={'"De Fonte Plus", Arial, sans-serif'}
+            timeZone="Asia/Kathmandu"
+            embedded
+            onReady={onHeroReady}
+          />
+        </Suspense>,
+        heroHost,
+      )}
+    </>
   );
 }
 
@@ -287,9 +318,6 @@ function useDeadspaceEffects({
     cleanups.push(initTransitionReveal(root));
     if (pathname === "/") cleanups.push(initPreloader(root));
     cleanups.push(initAnimatedCopy(root));
-    if (pathname === "/") cleanups.push(!reduced && canUseWebGL()
-      ? initDeferredWebGL(three => initSkyline(root, three), () => initFallbackSkyline(root))
-      : initFallbackSkyline(root));
     if (pathname === "/lab" && !reduced) {
       cleanups.push(initLabScroll(root));
       cleanups.push(initPieTransition(root));
@@ -700,156 +728,6 @@ function initAnimatedCopy(root: HTMLElement) {
   const timer = window.setTimeout(splitWhenReady, 900);
   document.fonts?.ready?.then(splitWhenReady) ?? window.requestAnimationFrame(splitWhenReady);
   return () => { active = false; window.clearTimeout(timer); splits.forEach(split => split.revert()); };
-}
-
-function initSkyline(root: HTMLElement, THREE: ThreeEngine) {
-  const canvas = root.querySelector<HTMLCanvasElement>("#skyline");
-  if (!canvas) return () => {};
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-  const pixelRatioLimit = isMobile ? 1.0 : 1.25;
-
-  const renderer = new THREE.WebGLRenderer({
-    canvas,
-    antialias: false,
-    powerPreference: "high-performance",
-    stencil: false,
-    depth: false,
-  });
-  const scene = new THREE.Scene();
-  const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-  const geometry = new THREE.PlaneGeometry(2, 2);
-  const material = new THREE.ShaderMaterial({
-    uniforms: {
-      iTime: { value: 0 },
-      iResolution: { value: new THREE.Vector3() },
-    },
-    vertexShader: `
-      varying vec2 vUv;
-      void main() {
-        vUv = uv;
-        gl_Position = vec4(position, 1.0);
-      }
-    `,
-    fragmentShader: `
-      #ifdef GL_FRAGMENT_PRECISION_HIGH
-        precision highp float;
-      #else
-        precision mediump float;
-      #endif
-
-      uniform float iTime;
-      uniform vec3 iResolution;
-      varying vec2 vUv;
-
-      uint seed = 31713U;
-
-      float rand(void) {
-        seed = (seed << 13U) ^ seed;
-        seed = seed * (seed * seed * 15731U + 789221U) + 1376312589U;
-        uint seed2 = seed * seed;
-        return float(seed2&0x7fffffffU)/float(0x7fffffffU);
-      }
-
-      float Polygon(vec2 uv, float h) {
-        float mid = (rand()-.5)*exp2(-h*2.);
-        float f = abs(uv.y-rand()+.5)-rand()-2.;
-        f = max(f,abs(uv.x-mid)-rand()-.5+h*.4);
-        f = max(f,abs(dot(uv,vec2(1,1)/sqrt(2.))-rand()+.5)-rand()-1.);
-        f = max(f,abs(dot(uv,vec2(1,-1)/sqrt(2.))-rand()+.5)-rand()-1.);
-        return f;
-      }
-
-      vec3 Buildings(vec2 uv, int layer) {
-        seed = uint(2. + uv.x/4.);
-        uv.x = (fract(uv.x/4.)-.5)*4.;
-
-        bool cull = (pow(float(layer+1)/8.,.3) < rand());
-        seed += 0x1001U*uint(layer);
-
-        float a = Polygon(uv-vec2(0,0), 0.);
-        float b = Polygon(uv-vec2(0,2), .5);
-        float c = Polygon(uv-vec2(0,4), 1.);
-        if (cull) { a = 1.; b = 1.; c = 1.; }
-
-        a = min(a, uv.y+.5);
-
-        vec3 f = vec3(a,min(a,b),min(min(a,b),c)).zyx;
-        vec3 col = vec3(.5+.5*f/(.01+abs(f)));
-
-        return vec3(dot(col,vec3(.985,.01,.005)));
-      }
-
-      void main() {
-        vec2 fragCoord = vUv * iResolution.xy;
-        vec2 uv = (fragCoord-iResolution.xy*vec2(.5,.5))/iResolution.y;
-
-        uv *= 10.;
-        uv.y += 3.;
-        uv.x -= 8.;
-
-        vec3 color = vec3(1);
-
-        const float size = .5;
-        const float fog = .15;
-        const float baseFog = 0.075;
-
-        color = min(color, mix(vec3(1), Buildings(uv*exp2(size*0.)+iTime*vec2(4,0),0), exp2(-fog*0.-baseFog)));
-        color = min(color, mix(vec3(1), Buildings(uv*exp2(size*1.)+iTime*vec2(4,0),1), exp2(-fog*1.-baseFog)));
-        color = min(color, mix(vec3(1), Buildings(uv*exp2(size*2.)+iTime*vec2(4,0),2), exp2(-fog*2.-baseFog)));
-        color = min(color, mix(vec3(1), Buildings(uv*exp2(size*3.)+iTime*vec2(4,0),3), exp2(-fog*3.-baseFog)));
-        color = min(color, mix(vec3(1), Buildings(uv*exp2(size*4.)+iTime*vec2(4,0),4), exp2(-fog*4.-baseFog)));
-        color = min(color, mix(vec3(1), Buildings(uv*exp2(size*5.)+iTime*vec2(4,0),5), exp2(-fog*5.-baseFog)));
-        color = min(color, mix(vec3(1), Buildings(uv*exp2(size*6.)+iTime*vec2(4,0),6), exp2(-fog*6.-baseFog)));
-        color = min(color, mix(vec3(1), Buildings(uv*exp2(size*7.)+iTime*vec2(4,0),7), exp2(-fog*7.-baseFog)));
-        color = min(color, mix(vec3(1), Buildings(uv*exp2(size*8.)+iTime*vec2(4,0),8), exp2(-fog*8.-baseFog)));
-        color = min(color, mix(vec3(1), Buildings(uv*exp2(size*9.)+iTime*vec2(4,0),9), exp2(-fog*9.-baseFog)));
-        color = min(color, mix(vec3(1), Buildings(uv*exp2(size*10.)+iTime*vec2(4,0),10), exp2(-fog*10.-baseFog)));
-        color = min(color, mix(vec3(1), Buildings(uv*exp2(size*11.)+iTime*vec2(4,0),11), exp2(-fog*11.-baseFog)));
-
-        color = pow(color, vec3(1./2.2));
-
-        const vec3 bgColor = vec3(0.89, 0.024, 0.075);
-        color = mix(bgColor, vec3(0.0), 1.0 - color.r);
-
-        gl_FragColor = vec4(color, 1.0);
-      }
-    `,
-    depthTest: false,
-    depthWrite: false,
-  });
-  const mesh = new THREE.Mesh(geometry, material);
-  scene.add(mesh);
-  let resizeTimer = 0;
-
-  function resize() {
-    window.clearTimeout(resizeTimer);
-    resizeTimer = window.setTimeout(() => {
-      const { width, height } = getSceneBufferSize({ width: window.innerWidth, height: window.innerHeight, maxPixelRatio: pixelRatioLimit });
-      renderer.setSize(width, height, false);
-      material.uniforms.iResolution.value.set(width, height, 1);
-    }, 100);
-  }
-
-  const loop = createVisibleRenderLoop({
-    element: canvas,
-    occludedBy: root.querySelector<HTMLElement>(".menu-overlay"),
-    draw(time) {
-      material.uniforms.iTime.value = time * 0.001;
-      try { renderer.render(scene, camera); } catch { return false; }
-      return true;
-    },
-  });
-
-  resize();
-  window.addEventListener("resize", resize);
-  return () => {
-    loop.destroy();
-    window.clearTimeout(resizeTimer);
-    window.removeEventListener("resize", resize);
-    geometry.dispose();
-    material.dispose();
-    renderer.dispose();
-  };
 }
 
 function initLabScroll(root: HTMLElement) {

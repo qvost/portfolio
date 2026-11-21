@@ -108,6 +108,10 @@ export function getDeadspaceFragment(route: DeadspaceRoute, assetBase: string) {
     setText(root, ".hero h1", "qvost");
     setText(root, ".hero > p", "Siddid Pandey / Software & systems");
     const hero = root.querySelector(".hero");
+    root.querySelector("#skyline")?.remove();
+    hero?.insertAdjacentHTML("afterbegin", '<div class="hero-halftone-slot"></div>');
+    const heading = hero?.querySelector("h1");
+    for (const attribute of ["data-animate-variant", "data-animate-on-scroll", "data-animate-delay"]) heading?.removeAttribute(attribute);
     root.querySelector(".hero-footer")?.insertAdjacentHTML("beforebegin", '<div class="hero-actions"><a href="#selected-work" class="hero-cta">View my work</a><a href="#about" class="hero-scroll mono">About me</a></div><div class="hero-side mono" aria-hidden="true">Execution / Search / Agents</div>');
     setText(root, ".hero-footer p:first-child", "3 research papers / Kathmandu");
     setText(root, ".hero-footer p:last-child", "Statis · Strata · Reify");
