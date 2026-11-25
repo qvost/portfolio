@@ -44,10 +44,13 @@ Google documentation, and remaining launch steps.
 - `src/shaligram-lab.ts` contains lab links and the three Reify discovery paths.
 - `src/global.css` contains the visual overrides and responsive lab layout.
 - `components/ui/colourist-reel-page/lab-continuation.tsx` owns the peeking panel, reveal, internal scrolling, and interactive compiler diagram.
-- `components/ui/colourist-reel-page/colour-ribbon-cursor.tsx` owns the cursor artwork.
+- `components/ui/colourist-reel-page/ink-cursor.tsx` owns the ink drop and precise pointer tip.
+- `components/ui/portfolio-footer.tsx` and its stylesheet share the contact footer between GitHub and `/work/`.
+- `components/ui/ascii-logo.tsx` samples the lab mark into interactive ASCII glyphs. `reactive-lab-mark.tsx` sets its palette and behavior.
 - `components/ui/github-contributions/` owns the third chapter, live calendar data, and its scoped styles.
 - `public/projects/` contains ten original illustrations matching the portfolio's paper and green theme.
 - `public/assets/shaligram/mark.svg` is the user's lab mark, sourced from the live lab site.
+- `public/assets/shaligram/mark-ascii.svg` has the same paths filled white so the ASCII sampler can read their brightness. `npm run assets:sync` regenerates it.
 
 The page takes explicit `site`, `projects`, `lab`, and `githubUsername` content. It has no video
 player, footage gallery, or film defaults. Project cards open descriptions,
@@ -78,6 +81,20 @@ P opens projects. I opens information. Escape returns from a project to the
 list, then home. Up/down arrows move through a focused project list, and Enter
 opens the selected project. Touch uses tap to center, then tap to open.
 
+The cursor is a small ink drop. Movement stretches it; hovering a control opens
+it into a soft disc around a precise point. A click compresses it. The point is
+blue on the portfolio and GitHub, green in the lab. It stops requesting frames
+once it settles. Inputs, touch, and reduced motion keep native cursors.
+
+The lab's hero mark uses the supplied Interactive ASCII Logo. Glyphs scatter near
+the pointer and spring back into the original silhouette. The sampler and its
+mask load on the first lab visit. Project artwork loads on the first grid visit.
+The small header mark
+stays static. The canvas pauses outside the visible lab, in hidden tabs, and
+under reduced motion. Reduced motion retains a still glyph rendering. A static
+SVG is visible while the canvas loads or if sampling fails. The logo button opens
+the Reify section with click, touch, Enter, or Space.
+
 The cursor and reveal respond to live reduced-motion changes. Touch has native
 pointer behavior. Hidden sections are inert. The lab uses native internal scroll
 with overscroll containment and a guard against the opening gesture's momentum
@@ -95,8 +112,22 @@ from the supplied Colourist Reel Page at revision `5ca0339059a7`. Untouched sour
 and attribution remain under `vendor/colourist-reel-page/`. Run
 `npm run source:verify` to verify the three original hashes. The public portfolio
 contains no footage or third-party film credits. The font remains Booton Medium.
-`npm run assets:sync` restores only the font and the lab mark.
+`npm run assets:sync` restores the font, lab mark, and its ASCII sampling mask.
+
+The untouched ASCII source is preserved in `vendor/ascii-logo/ascii-logo.tsx`.
+Its hash matches the supplied revision; `npm run source:verify` checks it alongside
+the original page source. The runtime keeps the supplied public defaults and adds
+an optional `active` prop so closed chapters can pause it. It uses no new package.
 
 Use `npm run typecheck` and `npm run build` for compile checks. Browser evidence
 is stored in the ignored `artifacts/` directory. Current coverage is recorded in
 `docs/acceptance.md`.
+
+## Final interaction and loading pass
+
+Decorative arrow icons have been removed from navigation and project links.
+The footer has an email link, social profiles, and a return to the opening page.
+Its interactive version also copies the address and reports the actual result.
+The static projects page keeps ordinary links and needs no JavaScript.
+
+See `docs/performance.md` for the local loading measurements and their limits.

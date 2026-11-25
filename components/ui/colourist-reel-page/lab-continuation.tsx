@@ -182,12 +182,11 @@ export function LabContinuation({ lab, host, expanded, covered, visible, onOpen,
     >
       <span className="q-lab-peek-index">01 / My AI lab</span>
       <span>Shaligram Labs</span>
-      <span className="q-lab-peek-arrow" aria-hidden="true">↑</span>
     </button>
     <div id="shaligram-content" ref={scrollRef} className="q-lab-scroll" inert={!expanded} tabIndex={expanded ? 0 : -1}>
       <header className="q-lab-header">
-        <a href={lab.href} target="_blank" rel="noreferrer" className="q-lab-brand"><img src="/assets/shaligram/mark.svg" alt="" />{lab.name}</a>
-        <button ref={backRef} type="button" onClick={onClose}>Back to portfolio <span aria-hidden="true">↑</span></button>
+        <a href={lab.href} target="_blank" rel="noreferrer" className="q-lab-brand">{expanded ? <img src="/assets/shaligram/mark.svg" alt="" /> : null}{lab.name}</a>
+        <button ref={backRef} type="button" onClick={onClose}>Back to portfolio </button>
         <span className="q-lab-reading-progress" aria-hidden="true" />
       </header>
       <div className="q-lab-body">
@@ -197,7 +196,7 @@ export function LabContinuation({ lab, host, expanded, covered, visible, onOpen,
             <p className="q-lab-kicker">Shaligram Labs</p>
             <h2>Interfaces for<br /><span>web agents.</span></h2>
             <p className="q-lab-intro">{lab.description}</p>
-            <a className="q-lab-visit" href={lab.href} target="_blank" rel="noreferrer">Visit the lab <span aria-hidden="true">↗</span></a>
+            <a className="q-lab-visit" href={lab.href} target="_blank" rel="noreferrer">Visit the lab </a>
           </div>
           <ReactiveLabMark active={expanded && visible && !covered} onExplore={() => scrollToLabChapter(scrollRef.current, 'lab-reify', reducedMotion)} />
         </div>
@@ -208,7 +207,7 @@ export function LabContinuation({ lab, host, expanded, covered, visible, onOpen,
               <h3 id="reify-heading">Reify<span>.</span></h3>
               <p>Compile a website into tools an agent can call.</p>
               <p className="q-lab-research-desc">Reify finds the data behind a website, infers its schema, and mounts tools for the task at hand.</p>
-              <div className="q-lab-links"><a href={lab.researchHref} target="_blank" rel="noreferrer">Read the paper ↗</a><a href={lab.sourceHref} target="_blank" rel="noreferrer">Source code ↗</a></div>
+              <div className="q-lab-links"><a href={lab.researchHref} target="_blank" rel="noreferrer">Read the paper</a><a href={lab.sourceHref} target="_blank" rel="noreferrer">Source code</a></div>
             </div>
             <div className="q-lab-discovery">
               <p className="q-lab-discovery-label">Three paths to a callable tool</p>
@@ -234,27 +233,27 @@ export function LabContinuation({ lab, host, expanded, covered, visible, onOpen,
               <div id="lab-stage-panel" role="tabpanel" aria-labelledby={`stage-${stage.id}`} tabIndex={0}>
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div key={stage.id} className="q-lab-stage-content" initial={{ opacity: 0, y: reducedMotion ? 0 : 5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: .18 }} aria-live="polite">
-                  <div className="q-lab-stage-flow"><span>{stage.input}</span><span aria-hidden="true">→</span><span>{stage.output}</span></div>
+                  <div className="q-lab-stage-flow"><span>{stage.input}</span><span>to</span><span>{stage.output}</span></div>
                   <code>{stage.code}</code><p>{stage.description}</p>
                 </motion.div>
               </AnimatePresence>
               </div>
-              <a className="q-lab-system-link" href={lab.systemHref} target="_blank" rel="noreferrer">Explore the compiler ↗</a>
+              <a className="q-lab-system-link" href={lab.systemHref} target="_blank" rel="noreferrer">Explore the compiler</a>
             </div>
           </div>
           <div className="q-lab-results">
             <div><strong>98.4<span>%</span></strong><p>fewer schema tokens</p></div>
             <div><strong>92.5<span>%</span></strong><p>task completion</p></div>
-            <a href={lab.researchHref} target="_blank" rel="noreferrer">Author-reported Reify paper results.<br />Read the methods and limits ↗</a>
+            <a href={lab.researchHref} target="_blank" rel="noreferrer">Author-reported Reify paper results.<br />Read the methods and limits</a>
           </div>
         </section>
         <section className="q-lab-principle" id="lab-approach">
           <p className="q-lab-kicker">Research and source code</p>
           <h3>The code and the<br />experiments are public.</h3>
-          <div><p>I publish code, measurements, and failed approaches so others can inspect and repeat the experiments.</p><a href={lab.manifestoHref} target="_blank" rel="noreferrer">Read the lab manifesto ↗</a></div>
+          <div><p>I publish code, measurements, and failed approaches so others can inspect and repeat the experiments.</p><a href={lab.manifestoHref} target="_blank" rel="noreferrer">Read the lab manifesto</a></div>
         </section>
-        <button ref={nextRef} className="q-lab-next" type="button" onClick={onNext} aria-controls="github-heading"><span className="q-lab-next-label">Next chapter <span>02 / GitHub activity</span></span><span className="q-lab-next-title">My GitHub contributions.</span><span className="q-lab-next-arrow" aria-hidden="true">↓</span></button>
-        <footer className="q-lab-footer"><span>Shaligram Labs / Kathmandu</span><a href={lab.href} target="_blank" rel="noreferrer">shaligramlabs.vercel.app ↗</a><button type="button" onClick={onClose}>Back to qvost ↑</button></footer>
+        <button ref={nextRef} className="q-lab-next" type="button" onClick={onNext} aria-controls="github-heading"><span className="q-lab-next-label">Next chapter <span>02 / GitHub activity</span></span><span className="q-lab-next-title">My GitHub contributions.</span></button>
+        <footer className="q-lab-footer"><span>Shaligram Labs / Kathmandu</span><a href={lab.href} target="_blank" rel="noreferrer">shaligramlabs.vercel.app</a><button type="button" onClick={onClose}>Back to qvost</button></footer>
       </div>
     </div>
     <LabNavigation container={scrollRef} active={expanded && visible && !covered} />

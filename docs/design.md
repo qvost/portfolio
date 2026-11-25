@@ -26,12 +26,17 @@ labeled author-reported, and links to research, source, and the manifesto.
 ## Typography and interaction
 
 Booton Medium remains the single face. The portfolio keeps its white stage,
-ink headline, grey copy, and hue-following role. The ribbon cursor has a tapered
-tail, pointer, hover ring, action label, and bounded click pulses. It stops at
-rest, on cancellation, in hidden tabs, and under reduced motion. Native pointer
-behavior remains available on touch.
+ink headline, grey copy, and hue-following role. The cursor is an ink drop that
+stretches with movement and expands over controls. A colored point marks the hit
+position. Blue changes to green in the lab. Animation stops at rest, on
+cancellation, in hidden tabs, and under reduced motion. Inputs and touch retain
+their native pointer behavior.
 
-The lab illustration uses editable layout and SVG paths around the user's mark.
+The final chapter and static projects page share a contact footer. The email
+address supplies its largest line of type. Thin rules separate contact, social
+links, and the small wordmark. Navigation uses plain text without arrow icons.
+
+The compiler diagram uses editable layout and SVG paths.
 Changing a discovery path updates its wire offset, labels, code, and explanation.
 The diagram illustrates the compiler's discovery order and has no live backend.
 It runs no permanent animation loop. Reduced motion removes its transitions.
@@ -44,16 +49,19 @@ and this focused revision.
 
 ## Final interaction pass
 
-Public Bencho previews informed four original, local refinements: magnetic dots
-around the lab's own mark, a spring selection tile in the research tabs, copy
+Public Bencho previews informed the original magnetic dots around the lab mark,
+a spring selection tile in the research tabs, copy
 feedback in a compact contact panel, and chapter ticks with reading progress.
 See `docs/interaction-references.md` for the reference pages. No paid source was
 downloaded and no dependency was added.
 
 Project artwork tilts at most 2.2 degrees; its button hit area stays fixed. The
-lab mark and nearby dots react only to a fine pointer, return on pointer leave,
-and stop when hidden, offscreen, or under reduced motion. The existing ribbon
-cursor remains the single global cursor effect.
+lab hero now uses the supplied ASCII component instead of magnetic dots. It samples
+the actual mark into green glyphs on the paper grid. Pointer movement pushes nearby
+glyphs out; a spring restores them. Sampling uses local dimensions so the mark
+stays accurate through the chapter zoom. Hidden or covered chapters stop drawing
+and flickering. Reduced motion keeps a static glyph rendering. The ink cursor
+is the single global cursor effect.
 
 Research controls now use native tab semantics, roving focus, arrow keys, Home,
 and End. Chapter navigation uses the lab's existing scroll container rather

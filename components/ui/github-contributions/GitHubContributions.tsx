@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, 
 import { useReducedMotion } from '../colourist-reel-page/motion-preference';
 import { calendarRange, calendarWeeks, contributionLabel, fetchContributions, formatContributionDate, type ContributionCalendar, type ContributionDay } from './github-data';
 import { ReactiveGitHubCat } from './ReactiveGitHubCat';
+import { PortfolioFooter } from '../portfolio-footer';
 import './styles.css';
 
 type FeedState =
@@ -72,13 +73,14 @@ function ContributionGraph({ calendar, active }: { calendar: ContributionCalenda
       <p className="q-gh-day-readout" aria-live="polite" aria-atomic="true">{day ? <><strong>{day.count.toLocaleString()} {day.count === 1 ? 'contribution' : 'contributions'}</strong><span>{formatContributionDate(day.date)}</span></> : 'Select a day to explore.'}</p>
       <div className="q-gh-legend" aria-label="Contribution intensity from less to more"><span>Less</span>{[0, 1, 2, 3, 4].map(level => <i key={level} data-level={level} />)}<span>More</span></div>
     </div>
-    <p className="q-gh-swipe-hint">Swipe across the calendar to explore the year <span aria-hidden="true">↔</span></p>
+    <p className="q-gh-swipe-hint">Swipe across the calendar to explore the year.</p>
   </div>;
 }
 
 /** The third chapter: a native calendar, fetched on entry and refreshed while visible. */
-export function GitHubContributions({ username, active, onBack, onHome }: {
+export function GitHubContributions({ username, email, active, onBack, onHome }: {
   username: string;
+  email: string;
   active: boolean;
   onBack: () => void;
   onHome: () => void;
@@ -186,10 +188,10 @@ export function GitHubContributions({ username, active, onBack, onHome }: {
   const profile = `https://github.com/${encodeURIComponent(username)}`;
   return <section className="q-github-page" data-active={active} inert={!active} aria-labelledby="github-heading">
     <div className="q-github-scroll" ref={scroll} tabIndex={active ? 0 : -1}>
-      <header className="q-gh-header"><div className="q-gh-brand"><ReactiveGitHubCat active={active} compact /><a href={profile} target="_blank" rel="noreferrer">{username}<span> / GitHub</span></a></div><button type="button" onClick={onBack}>Back to the lab <span aria-hidden="true">↑</span></button></header>
+      <header className="q-gh-header"><div className="q-gh-brand"><ReactiveGitHubCat active={active} compact /><a href={profile} target="_blank" rel="noreferrer">{username}<span> / GitHub</span></a></div><button type="button" onClick={onBack}>Back to the lab </button></header>
       <div className="q-gh-body">
         <div className="q-gh-eyebrow"><span>02 / Open source</span><span className="q-gh-source-status" data-connected={feed.kind === 'ready'}><i />{feed.kind === 'ready' ? 'Connected to GitHub' : feed.kind === 'loading' ? 'Connecting to GitHub' : 'Feed unavailable'}</span></div>
-        <div className="q-gh-hero"><div><p className="q-gh-kicker">qvost on GitHub</p><h2 id="github-heading" ref={heading} tabIndex={-1}>Code and<br /><span>activity.</span></h2></div><div className="q-gh-hero-aside"><ReactiveGitHubCat active={active} /><p>My public contribution history.<br />Choose a day to see its activity.</p><a href={profile} target="_blank" rel="noreferrer">View my GitHub <span aria-hidden="true">↗</span></a></div></div>
+        <div className="q-gh-hero"><div><p className="q-gh-kicker">qvost on GitHub</p><h2 id="github-heading" ref={heading} tabIndex={-1}>Code and<br /><span>activity.</span></h2></div><div className="q-gh-hero-aside"><ReactiveGitHubCat active={active} /><p>My public contribution history.<br />Choose a day to see its activity.</p><a href={profile} target="_blank" rel="noreferrer">View my GitHub </a></div></div>
         <div className="q-gh-feed" aria-busy={feed.kind === 'loading'}>
           {feed.kind === 'ready' ? <>
             <div className="q-gh-stats"><div><strong>{feed.calendar.total.toLocaleString()}</strong><span>contributions in the last year</span></div><div><strong>{feed.calendar.activeDays.toLocaleString()}</strong><span>days with contributions</span></div><div><strong>{feed.calendar.busiest.count.toLocaleString()}</strong><span>most contributions in a day</span></div></div>
@@ -197,7 +199,7 @@ export function GitHubContributions({ username, active, onBack, onHome }: {
           </> : <div className="q-gh-feed-placeholder" role="status"><div className="q-gh-placeholder-grid" aria-hidden="true">{Array.from({ length: 56 }, (_, i) => <i key={i} />)}</div><h3>{feed.kind === 'loading' ? 'Fetching the latest activity…' : 'GitHub is taking a moment.'}</h3><p>{feed.kind === 'loading' ? 'The calendar will appear when the feed arrives.' : 'The activity feed could not be reached. Try again or visit my profile.'}</p>{feed.kind === 'error' ? <button type="button" onClick={() => void refresh()}>Try again <span aria-hidden="true">↻</span></button> : null}</div>}
           <div className="q-gh-feed-footer"><p role="status">{feed.kind === 'ready' ? feed.refresh === 'failed' ? 'Refresh failed. Showing the last successful fetch.' : <>{feed.refresh === 'pending' ? 'Refreshing…' : <>Fetched at {new Date(feed.calendar.fetchedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}.</>} <span>Source updates about hourly.</span></> : 'Public contribution activity · No sign-in needed.'}</p><button type="button" onClick={() => void refresh()} disabled={feed.kind === 'loading' || (feed.kind === 'ready' && feed.refresh === 'pending')}>Refresh <span aria-hidden="true">↻</span></button></div>
         </div>
-        <footer className="q-gh-footer"><p>Source code and contribution history.</p><a href={profile} target="_blank" rel="noreferrer">@{username} <span aria-hidden="true">↗</span></a><button type="button" onClick={onHome}>Back to the portfolio <span aria-hidden="true">↑</span></button></footer>
+        <PortfolioFooter email={email} onHome={onHome} />
       </div>
       <nav className="q-gh-chapters" aria-label="Portfolio chapters"><button type="button" onClick={onHome}>00 <span>Portfolio</span></button><button type="button" onClick={onBack}>01 <span>The lab</span></button><span aria-current="page">02 <span>GitHub</span></span></nav>
     </div>

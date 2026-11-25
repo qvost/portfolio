@@ -90,7 +90,7 @@ export function ContactPanel({ email }: { email: string }) {
         <div className="q-contact-heading"><p>Have something in mind?</p><button type="button" aria-label="Close contact panel" onClick={() => { setOpen(false); trigger.current?.focus({ preventScroll: true }); }}>×</button></div>
         <p className="q-contact-note">Write to me about it.</p>
         <div className="q-contact-address"><input ref={address} readOnly value={email} aria-label="Email address" onFocus={event => event.currentTarget.select()} /><CopyButton value={email} /></div>
-        <a className="q-contact-mail" href={`mailto:${email}`}>Open email <span aria-hidden="true">↗</span></a>
+        <a className="q-contact-mail" href={`mailto:${email}`}>Open email </a>
       </motion.div> : null}
     </AnimatePresence>
   </div>;

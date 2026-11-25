@@ -112,11 +112,13 @@ noscript main { padding: 40px; max-width: 700px; }
 .qvost-portfolio .q-project-action[data-dark="true"] a { color: #fff; text-underline-offset: 4px; text-decoration: underline; }
 
 .cr-root .q-cursor-layers { position: absolute; inset: 0; z-index: 1000; pointer-events: none; overflow: hidden; }
-.cr-root .q-cursor-ribbon { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-.cr-root .q-cursor-pointer { position: absolute; top: 0; left: 0; opacity: 0; will-change: transform; pointer-events: none; }
-.cr-root .q-cursor-pointer svg { position: absolute; top: -1px; left: -1px; }
-.cr-root .q-cursor-pointer::after { content: attr(data-action); position: absolute; top: 22px; left: 17px; font-size: 10px; color: #777; background: #ffffffd9; border-radius: 3px; padding: 1px 4px; white-space: nowrap; }
-.cr-root .q-cursor-pointer[data-action=""]::after { display: none; }
+.cr-root .q-cursor-pointer { --cursor-accent: #5862e8; position: absolute; top: 0; left: 0; opacity: 0; color: #242424; will-change: transform; pointer-events: none; }
+.cr-root[data-chapter="lab"] .q-cursor-pointer { --cursor-accent: #6c7952; color: #242923; }
+.cr-root[data-dark="true"] .q-cursor-pointer { color: #fff; }
+.cr-root .q-cursor-drop { position: absolute; top: -4px; left: -4px; width: 8px; height: 8px; border-radius: 50%; background: currentColor; transform-origin: center; opacity: 1; transition: opacity 120ms ease; }
+.cr-root .q-cursor-point { position: absolute; left: -1.5px; top: -1.5px; width: 3px; height: 3px; border-radius: 50%; background: var(--cursor-accent); opacity: 0; transition: opacity 120ms ease; }
+.cr-root .q-cursor-pointer[data-hover="true"] .q-cursor-drop { opacity: .13; }
+.cr-root .q-cursor-pointer[data-hover="true"] .q-cursor-point { opacity: 1; }
 .cr-root[data-cursor="active"], .cr-root[data-cursor="active"] * { cursor: none !important; }
 .cr-root :is(button, a, input, [tabindex]):focus-visible { outline: 2px solid #5862e8 !important; outline-offset: 5px; }
 .cr-root [inert], .cr-root [inert] * { pointer-events: none !important; }
@@ -182,7 +184,6 @@ noscript main { padding: 40px; max-width: 700px; }
 
 /* The lab continues the original bottom-edge reveal without any film media. */
 .qvost-portfolio .q-reel-caption { bottom: 108px; }
-.qvost-portfolio .q-scroll-arrow { display: block; margin-top: 12px; text-align: center; font-size: 18px; color: #888; }
 .qvost-portfolio {
   --lab-paper: #e9e7df;
   --lab-ink: #242923;
@@ -216,7 +217,6 @@ noscript main { padding: 40px; max-width: 700px; }
 .qvost-portfolio .q-lab-peek { position: absolute; top: 0; left: 0; width: 100%; height: 64px; padding: 0 30px; display: flex; align-items: center; justify-content: space-between; gap: 20px; opacity: 1; transition: opacity 250ms; }
 .qvost-portfolio .q-lab-peek > span { font-size: 13px; letter-spacing: -.15px; }
 .qvost-portfolio .q-lab-peek .q-lab-peek-index { font-size: 10px; color: var(--lab-quiet); }
-.qvost-portfolio .q-lab-peek .q-lab-peek-arrow { font-size: 22px; }
 .qvost-portfolio .q-lab-panel[data-expanded="true"] .q-lab-peek { opacity: 0; pointer-events: none; }
 .qvost-portfolio .q-lab-scroll { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; touch-action: pan-y; opacity: 0; transition: opacity 400ms; }
 .qvost-portfolio .q-lab-panel[data-expanded="true"] .q-lab-scroll { opacity: 1; transition-delay: 450ms; }
@@ -237,18 +237,13 @@ noscript main { padding: 40px; max-width: 700px; }
 .qvost-portfolio .q-lab-visit { display: inline-flex; align-items: center; gap: 52px; padding-bottom: 9px; border-bottom: 1px solid var(--lab-ink); margin-top: 32px; font-size: 12px; }
 .qvost-portfolio .q-lab-visit span { font-size: 20px; }
 .qvost-portfolio .q-lab-emblem { position: relative; aspect-ratio: 1; width: 100%; max-width: 450px; justify-self: end; display: grid; place-items: center; }
-.qvost-portfolio .q-lab-emblem::before, .qvost-portfolio .q-lab-emblem::after { content: ''; position: absolute; background: var(--lab-line); opacity: .6; }
-.qvost-portfolio .q-lab-emblem::before { width: 100%; height: 1px; }
-.qvost-portfolio .q-lab-emblem::after { width: 1px; height: 100%; }
-.qvost-portfolio .q-lab-emblem > img { width: 69%; height: 69%; object-fit: contain; mix-blend-mode: multiply; z-index: 1; transition: transform 1000ms var(--transition-ease); }
-.qvost-portfolio .q-lab-emblem > img { transform: translate(var(--mark-x, 0px), var(--mark-y, 0px)) rotate(var(--mark-turn, 0deg)); transition: transform 650ms cubic-bezier(.16,1,.3,1); }
-.qvost-portfolio .q-lab-orbit { position: absolute; border: 1px solid var(--lab-line); border-radius: 50%; }
-.qvost-portfolio .q-lab-orbit-outer { inset: 4%; }
-.qvost-portfolio .q-lab-orbit-inner { inset: 13%; border-style: dashed; opacity: .65; }
+.qvost-portfolio .q-lab-ascii { position: absolute; inset: 5%; overflow: hidden; border-radius: 3px; }
+.qvost-portfolio .q-lab-ascii .al-root { position: absolute; inset: 0; }
+.qvost-portfolio .q-lab-ascii-fallback { position: absolute; width: 76%; height: 76%; left: 12%; top: 12%; opacity: .7; object-fit: contain; }
+.qvost-portfolio .q-lab-ascii:has(.al-root[data-ready]) .q-lab-ascii-fallback { visibility: hidden; }
 .qvost-portfolio .q-lab-coordinate { position: absolute; left: 50%; transform: translateX(-50%); font-size: 9px; color: var(--lab-quiet); background: var(--lab-paper); padding: 4px 8px; white-space: nowrap; }
 .qvost-portfolio .q-lab-coordinate-top { top: 1%; }
 .qvost-portfolio .q-lab-coordinate-bottom { bottom: 1%; }
-.qvost-portfolio .q-lab-emblem-dot { position: absolute; top: 49%; right: 3.2%; width: 7px; height: 7px; border-radius: 50%; background: var(--lab-accent); }
 .qvost-portfolio .q-lab-research { padding: 28px 0 0; border-top: 1px solid var(--lab-line); }
 .qvost-portfolio .q-lab-section-label { display: flex; justify-content: space-between; }
 .qvost-portfolio .q-lab-section-label span { font-size: 10px; color: var(--lab-quiet); }
@@ -302,8 +297,7 @@ noscript main { padding: 40px; max-width: 700px; }
 .qvost-portfolio .q-lab-next-label { display: flex; gap: 28px; grid-column: 1 / -1; color: var(--lab-quiet); font-size: 11px; }
 .qvost-portfolio .q-lab-next-label > span { font-size: inherit; }
 .qvost-portfolio .q-lab-next-title { font-size: clamp(23px, 3cqw, 42px); line-height: 1.2; letter-spacing: -.035em; }
-.qvost-portfolio .q-lab-next-arrow { font-size: 34px; align-self: center; transition: transform 300ms var(--transition-ease); }
-.qvost-portfolio .q-lab-next:hover .q-lab-next-arrow { transform: translateY(6px); }
+.qvost-portfolio .q-lab-next:hover .q-lab-next-title { color: #4b5d37; }
 .qvost-portfolio .q-lab-panel a:hover, .qvost-portfolio .q-lab-panel .q-lab-header button:hover, .qvost-portfolio .q-lab-panel .q-lab-footer button:hover { color: #000; }
 
 /* Original project illustrations replace every film cover and player. */
@@ -370,7 +364,6 @@ noscript main { padding: 40px; max-width: 700px; }
 
 @media (prefers-reduced-motion: reduce) {
   .qvost-portfolio .q-lab-panel, .qvost-portfolio .q-lab-scroll { transition: none; }
-  .qvost-portfolio .q-lab-emblem:hover > img { transform: none; }
 }
 
 /* Pointer, contact, and lab navigation refinements. */
@@ -395,10 +388,12 @@ noscript main { padding: 40px; max-width: 700px; }
 .qvost-portfolio .q-lab-header { position: sticky; top: 0; z-index: 5; background: var(--lab-paper); }
 .qvost-portfolio .q-lab-reading-progress { position: absolute; bottom: -1px; left: 0; width: 100%; height: 2px; background: var(--lab-accent); transform: scaleX(var(--lab-progress, 0)); transform-origin: left; pointer-events: none; }
 .qvost-portfolio .q-lab-emblem { cursor: pointer; }
-.qvost-portfolio .q-mark-field { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.qvost-portfolio .q-mark-field circle { fill: var(--lab-accent); opacity: .1; transition: transform 600ms cubic-bezier(.16,1,.3,1), opacity 300ms; }
-.qvost-portfolio .q-lab-emblem[data-pointer-active] .q-mark-field circle { transition-duration: 160ms; }
 .qvost-portfolio .q-lab-coordinate { z-index: 2; }
+.qvost-portfolio .q-mark-static-label { display: none; }
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .qvost-portfolio .q-mark-motion-label { display: none; }
+  .qvost-portfolio .q-mark-static-label { display: inline; }
+}
 .qvost-portfolio .q-mark-hover-label { position: absolute; inset: 4px 0; opacity: 0; transform: translateY(4px); }
 .qvost-portfolio .q-mark-rest-label, .qvost-portfolio .q-mark-hover-label { font-size: inherit; line-height: inherit; transition: opacity 180ms, transform 180ms; }
 .qvost-portfolio .q-lab-emblem:is(:hover, :focus-visible) .q-mark-hover-label { opacity: 1; transform: translateY(0); }

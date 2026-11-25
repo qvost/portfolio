@@ -1,5 +1,38 @@
 # Acceptance record
 
+## Ink cursor and footer, November 26
+
+- Replaced the brackets with an ink drop. It stretches with movement, expands over controls, and compresses on press. The hover tip is blue on the white pages and green in the lab.
+- A fresh desktop Chromium session confirmed hover expansion and press compression. A mutation observer recorded zero cursor style writes during a settled 350ms interval.
+- Live reduced motion, pointer cancellation, and movement over the contact input restored the native cursor. Chromium coarse-pointer emulation also left it native.
+- Removed upright and directional arrow glyphs from rendered navigation and project links. Keyboard arrow controls still work.
+- Added a shared contact footer to the final GitHub chapter and the static projects page. It contains the email, social links, location, year, and a return link. The interactive copy target is 44px square.
+- The real clipboard operation reported success. A simulated permission rejection reported failure. The footer return control also worked with keyboard Enter.
+- Inspected the footer at 1440px and 320px. The narrow GitHub scroll width remained 320px. The static projects footer loaded its standalone stylesheet and has no copy button requiring JavaScript.
+- Entered the lab, confirmed the ASCII mark loaded, continued through the zoom-out transition to GitHub, and returned to the introduction. The deferred project grid contained all ten projects when opened.
+- Three local throttled navigations recorded six initial resource requests rather than fifteen, and 277,023 encoded resource bytes rather than 429,918. Paint timings were unavailable in that automated session; no Core Web Vitals pass is claimed. See `performance.md`.
+- TypeScript, the production build, static HTML generation, and all four vendor source hash checks pass. No runtime package was added.
+
+Current screenshots and interaction records are in ignored `artifacts/ink-final-hover.png`,
+`footer-desktop.png`, `footer-mobile-final.png`, `footer-static-mobile.png`,
+`cursor-interactions.json`, and `final-interactions.json`.
+
+## Bracket cursor and ASCII mark, November 26
+
+- Replaced the ribbon with a precise point and spring brackets. Brackets widen over controls, compress on press, and show short action labels. The lab uses a green point; the portfolio and GitHub use blue.
+- The cursor parks after settling, clears on cancellation, blur, or tab visibility changes, and restores native behavior for inputs, coarse pointers, and live reduced-motion changes.
+- Copied the supplied ASCII source before adapting it. Its untouched vendor hash matches `c1ec8a5fbe4832a9ae78f97b975385bceacaa04f19d7b45138690a5a6190978d`. `npm run source:verify` confirms all four shipped source files.
+- The lab hero samples the actual Shaligram mark through a white-fill copy of the original SVG. The header keeps the static original. No external sample logo appears in the page.
+- Fine-pointer inspection confirmed glyph displacement and a full spring return to the original sampled positions. The cursor's hover and press shapes were inspected in the browser.
+- Canvas redraws stop when offscreen, in a background tab, or in a closed chapter. Live reduced motion produces identical successive canvas frames and removes the custom cursor.
+- Blocking the sampling asset left the original SVG visible. Normal loading completed without a missing asset or uncaught browser error.
+- Desktop 1440px and narrow 320px layouts were inspected. At 320px, the lab scroll width remained 320px. Chromium touch emulation confirmed native swiping over the mark and tapping it to reach Reify. No physical iOS or Android device was used.
+- TypeScript and the production build pass, including static HTML generation. No runtime package was added.
+
+Evidence in `artifacts/`: `bracket-cursor-hover.png`, `ascii-scatter-desktop.png`,
+`ascii-lab-desktop.png`, `ascii-lab-mobile.png`, `ascii-logo-touch.png`, and
+`ascii-static-fallback.png`.
+
 ## Copy and search pass, November 26
 
 - The landing heading names qvost and describes the work. The GitHub and lab copy uses direct descriptions. The 320px GitHub heading fits after shortening it to "Code and activity."

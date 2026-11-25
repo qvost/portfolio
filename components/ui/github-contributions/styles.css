@@ -90,9 +90,6 @@
 .qvost-portfolio .q-gh-feed-placeholder > p { font-size: 12px; color: var(--q-quiet); max-width: 300px; }
 .qvost-portfolio .q-gh-placeholder-grid { display: grid; grid-template-columns: repeat(14, 8px); gap: 3px; margin-bottom: 12px; opacity: .65; }
 .qvost-portfolio .q-gh-placeholder-grid > i { width: 8px; height: 8px; border-radius: 1px; background: var(--gh-line); }
-.qvost-portfolio .q-gh-footer { border-top: 1px solid var(--gh-line); padding: 25px 0 40px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-.qvost-portfolio .q-gh-footer > p { color: var(--q-quiet); font-size: 11px; }
-.qvost-portfolio .q-gh-footer > a, .qvost-portfolio .q-gh-footer > button { font-size: 11px; display: flex; align-items: center; gap: 20px; padding: 8px 0; }
 .qvost-portfolio .q-gh-chapters { display: flex; justify-content: center; gap: 28px; padding: 15px 24px 32px; }
 .qvost-portfolio .q-gh-chapters > button, .qvost-portfolio .q-gh-chapters > span { display: flex; gap: 7px; align-items: center; font-size: 10px; color: var(--q-quiet); }
 .qvost-portfolio .q-gh-chapters span span, .qvost-portfolio .q-gh-chapters button span { font-size: inherit; }
@@ -133,9 +130,6 @@
   .qvost-portfolio .q-gh-feed-footer { align-items: flex-start; padding-bottom: 30px; }
   .qvost-portfolio .q-gh-feed-footer > p { padding-top: 10px; max-width: 210px; }
   .qvost-portfolio .q-gh-feed-footer > p > span { display: block; }
-  .qvost-portfolio .q-gh-footer { flex-wrap: wrap; gap: 15px; padding: 25px 0; }
-  .qvost-portfolio .q-gh-footer > p { flex-basis: 100%; }
-  .qvost-portfolio .q-gh-footer > button { margin-left: auto; }
   .qvost-portfolio .q-gh-chapters { gap: 22px; padding-bottom: max(32px, env(safe-area-inset-bottom)); }
 }
 @media (prefers-reduced-motion: reduce) {

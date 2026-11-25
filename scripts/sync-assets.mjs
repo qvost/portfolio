@@ -1,4 +1,4 @@
-import { mkdir, rename, stat, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, rename, stat, writeFile } from 'node:fs/promises';
 
 // Only assets currently used by the portfolio. No film media is downloaded.
 const assets = [
@@ -19,4 +19,7 @@ for (const asset of assets) {
   await writeFile(temporary, bytes);
   await rename(temporary, destination);
 }
-console.info('Portfolio font and lab mark are available.');
+// The sampler reads bright pixels against black; keep the original geometry intact.
+const mark = await readFile(new URL('../public/assets/shaligram/mark.svg', import.meta.url), 'utf8');
+await writeFile(new URL('../public/assets/shaligram/mark-ascii.svg', import.meta.url), mark.replaceAll('fill="currentColor"', 'fill="#ffffff"'));
+console.info('Portfolio font, lab mark, and ASCII sampling mask are available.');

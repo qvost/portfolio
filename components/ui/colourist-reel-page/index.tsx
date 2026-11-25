@@ -28,7 +28,7 @@ import {
   type ColouristSite,
 } from "./data";
 import { getColouristReelPageStyles } from "./styles";
-import { ColourRibbonCursor } from "./colour-ribbon-cursor";
+import { InkCursor } from "./ink-cursor";
 import { useReducedMotion } from "./motion-preference";
 import { LabContinuation, type ShaligramLab } from "./lab-continuation";
 import { ContactPanel } from "./contact-panel";
@@ -914,6 +914,8 @@ const ProjectsScreen = memo(function ProjectsScreen({
   const isPlayer = activePage === "project";
   const isList = projectViewMode === "list";
   const isGrid = projectViewMode === "grid";
+  const [gridOpened, setGridOpened] = useState(isActive && isGrid);
+  useEffect(() => { if (isActive && isGrid) setGridOpened(true); }, [isActive, isGrid]);
   const small = isSmall(useBreakpoint());
   const listKey = filtered.map((p) => p.slug).join("|");
 
@@ -1004,14 +1006,14 @@ const ProjectsScreen = memo(function ProjectsScreen({
             transitionDelay: isGrid && isPlayer ? "500ms" : "0ms",
           }}
         >
-          <ProjectGrid
+          {gridOpened ? <ProjectGrid
             projects={filtered}
             isPlayerMode={isPlayer}
             isActive={isActive && isGrid}
             useDelay={isGrid && !isPlayer}
             setActiveProject={setActiveProject}
             setActivePage={setActivePage}
-          />
+          /> : null}
         </motion.div>
       </div>
     </motion.section>
@@ -1072,7 +1074,7 @@ function HomeScreen({
           {site.name}, a <ColourTitle>{site.role}</ColourTitle> {site.titleSuffix}
         </h1>
         <p className="cr-home-sub">{site.subTitle}</p>
-        <a className="q-work-index-link" href="/work/">Browse projects <span aria-hidden="true">↗</span></a>
+        <a className="q-work-index-link" href="/work/">Browse projects </a>
       </div>
     </motion.section>
   );
@@ -1501,8 +1503,8 @@ function ProjectInfo({ isActive, project }: { isActive: boolean; project: Colour
           <p className="cr-pinfo-description">{project.description}</p>
           {project.stack ? <p className="q-project-stack">Built with <span>{project.stack}</span></p> : null}
           <div className="cr-pinfo-links">
-            {project.href ? <a href={project.href} target="_blank" rel="noreferrer">Visit project ↗</a> : null}
-            {project.source ? <a href={project.source} target="_blank" rel="noreferrer">View source ↗</a> : null}
+            {project.href ? <a href={project.href} target="_blank" rel="noreferrer">Visit project</a> : null}
+            {project.source ? <a href={project.source} target="_blank" rel="noreferrer">View source</a> : null}
           </div>
           <p className="q-project-author">Code & design by Siddid Pandey</p>
         </div>
@@ -1532,10 +1534,10 @@ function PortfolioChrome({ site, activePage, projectViewMode, expanded, project,
         <ContactPanel email={site.email} />
       </> : null}
     </> : null}
-    {activePage === 'home' && !expanded ? <button type="button" className="q-reel-caption" onClick={openLab}>Scroll to explore <span>/ my AI lab</span><span className="q-scroll-arrow" aria-hidden="true">↓</span></button> : null}
+    {activePage === 'home' && !expanded ? <button type="button" className="q-reel-caption" onClick={openLab}>Scroll to explore <span>/ my AI lab</span></button> : null}
     {activePage === 'projects' && project && projectViewMode === 'list' ? <div className="q-project-action">
-      {project.href ? <a href={project.href} target="_blank" rel="noreferrer">Visit {project.client} ↗</a> : null}
-      {project.source ? <a href={project.source} target="_blank" rel="noreferrer">View source ↗</a> : null}
+      {project.href ? <a href={project.href} target="_blank" rel="noreferrer">Visit {project.client}</a> : null}
+      {project.source ? <a href={project.source} target="_blank" rel="noreferrer">View source</a> : null}
     </div> : null}
   </div>;
 }
@@ -1624,11 +1626,11 @@ export default function ColouristReelPage({
           isActive={activePage === 'projects'} setActiveProject={setActiveProject} setActivePage={setActivePage} />
         <InfoScreen site={site} isActive={activePage === 'information'} />
         <LabContinuation lab={lab} host={rootRef} expanded={labExpanded} covered={githubExpanded} visible={activePage === 'home'} onOpen={openLab} onClose={closeLab} onNext={openGitHub} />
-        <GitHubContributions key={githubUsername} username={githubUsername} active={githubExpanded} onBack={openLab} onHome={closeLab} />
+        <GitHubContributions key={githubUsername} username={githubUsername} email={site.email} active={githubExpanded} onBack={openLab} onHome={closeLab} />
         <ProjectInfo isActive={activePage === 'project'} project={activeProject} />
         <PortfolioChrome site={site} activePage={activePage} projectViewMode={projectViewMode} expanded={labExpanded}
           project={activeProject} count={projects.length} openLab={openLab} />
-        <ColourRibbonCursor host={rootRef} />
+        <InkCursor host={rootRef} />
       </div>
     </LayoutGroup>
   </RootContext.Provider>;

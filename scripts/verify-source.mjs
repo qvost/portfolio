@@ -12,3 +12,8 @@ for (const [file, hash] of Object.entries(expected)) {
   if (actual !== hash) throw new Error(`Source hash mismatch: ${file}`);
   console.info(`Verified ${file}`);
 }
+const ascii = await readFile(new URL('../vendor/ascii-logo/ascii-logo.tsx', import.meta.url));
+if (createHash('sha256').update(ascii).digest('hex') !== 'c1ec8a5fbe4832a9ae78f97b975385bceacaa04f19d7b45138690a5a6190978d') {
+  throw new Error('Source hash mismatch: ascii-logo.tsx');
+}
+console.info('Verified ascii-logo.tsx');
