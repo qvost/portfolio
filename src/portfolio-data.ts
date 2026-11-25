@@ -8,8 +8,8 @@ export const portfolioSite = {
   location: 'Kathmandu, Nepal',
   timezone: 'Asia/Kathmandu',
   role: 'developer',
-  titleSuffix: 'building from the runtime up.',
-  subTitle: 'Siddid Pandey. Systems, tools & interfaces.\nIndependent work from Kathmandu, Nepal.',
+  titleSuffix: 'building tools and systems.',
+  subTitle: 'Siddid Pandey, based in Kathmandu, Nepal.\nRust, React and independent AI research at Shaligram Labs.',
   description: "I'm Siddid, a developer who goes by qvost.\n\nI work on deterministic systems and infrastructure for agents at Shaligram Labs. I also make tools for everyday life and websites with custom motion and interaction.\n\nMost of my systems code is Rust. On the web, I work with React and TypeScript.\n\nHave something in mind? Write to me.",
   featuredLogos: [],
   builtBy: { label: 'qvost', href: 'https://github.com/qvost' },
@@ -64,7 +64,7 @@ const work = [
     stack: 'Next.js / TypeScript', href: 'https://shaligramlabs.vercel.app/',
   },
   {
-    slug: 'nitro-fan', client: 'nitro-fan', title: 'A cooler Linux laptop', type: 'experiments',
+    slug: 'nitro-fan', client: 'nitro-fan', title: 'Linux fan control', type: 'experiments',
     tileColor: '#8b979d',
     description: 'Controls fan speed and reads temperatures on Acer Nitro V 15 laptops running Linux. Includes a thermal daemon and JSON output for status bars.',
     stack: 'Python / Linux', href: 'https://github.com/qvost/nitro-fan#readme',
@@ -76,7 +76,7 @@ const work = [
     stack: 'React / GSAP', href: 'https://seedhe-maut-theta.vercel.app/',
   },
   {
-    slug: 'sonafi-site', client: 'Sanofi study', title: 'An independent web concept', type: 'experiments',
+    slug: 'sonafi-site', client: 'Sanofi study', title: 'Website concept', type: 'experiments',
     tileColor: '#9673b6',
     description: 'An independent Sanofi website concept, executive pitch, and research dossier. Includes clinical-program filters, search, and a film dialog.',
     stack: 'React / TypeScript', href: 'https://github.com/qvost/sonafi-site#readme',

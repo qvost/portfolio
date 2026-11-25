@@ -188,7 +188,7 @@ const projects = [
   { slug: 'hisaab', name: 'Hisaab', subtitle: 'Invoicing & records', stack: 'Next.js / IndexedDB', ground: '#efede4', drawing: hisaab(), description: 'A rupee ledger with rows of entries and a circular check mark.' },
   { slug: 'samayamiiti', name: 'Samayamiiti', subtitle: 'Calendar & time', stack: 'React / Vite', ground: '#e7e9e1', drawing: samayamiiti(), description: 'A finely marked analog clock overlaps a small calendar with one highlighted day.' },
   { slug: 'shaligram-labs', name: 'Shaligram Labs', subtitle: 'Research & infrastructure', stack: 'Next.js / TypeScript', ground: '#e9e7df', drawing: await shaligram(), description: 'The original Shaligram Labs mark centered within a field of research orbits.' },
-  { slug: 'nitro-fan', name: 'nitro-fan', subtitle: 'A cooler Linux laptop', stack: 'Python / Linux', ground: '#e3e7e2', drawing: nitroFan(), description: 'A seven-bladed cooling fan inside a precisely drawn hardware enclosure.' },
+  { slug: 'nitro-fan', name: 'nitro-fan', subtitle: 'Linux fan control', stack: 'Python / Linux', ground: '#e3e7e2', drawing: nitroFan(), description: 'A seven-bladed cooling fan inside a hardware enclosure.' },
   { slug: 'seedhemaut-tribute', name: 'Seedhe Maut', subtitle: 'Music & interaction', stack: 'React / GSAP', ground: '#e8e4db', drawing: seedheMaut(), description: 'Two overlapping vinyl records sit above a two-channel audio waveform.' },
   { slug: 'sonafi-site', name: 'Sanofi study', subtitle: 'Independent web concept', stack: 'React / TypeScript', ground: '#e6eae3', drawing: sanofi(), description: 'An abstract double helix with molecular outlines, illustrating an independent healthcare website concept.' },
 ];

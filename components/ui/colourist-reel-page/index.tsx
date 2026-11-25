@@ -1057,7 +1057,7 @@ function HomeScreen({
       className="cr-home"
       inert={!isActive || isPlayerMode}
       variants={pageVariants}
-      initial="hidden"
+      initial={isActive ? false : 'hidden'}
       animate={isActive ? "visible" : "hidden"}
       style={{ zIndex: isActive ? 2 : 1 }}
     >
@@ -1069,9 +1069,10 @@ function HomeScreen({
         }}
       >
         <h1 className="cr-home-title">
-          A <ColourTitle>{site.role}</ColourTitle> {site.titleSuffix}
+          {site.name}, a <ColourTitle>{site.role}</ColourTitle> {site.titleSuffix}
         </h1>
         <p className="cr-home-sub">{site.subTitle}</p>
+        <a className="q-work-index-link" href="/work/">Browse projects <span aria-hidden="true">↗</span></a>
       </div>
     </motion.section>
   );

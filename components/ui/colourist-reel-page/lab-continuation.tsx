@@ -249,11 +249,11 @@ export function LabContinuation({ lab, host, expanded, covered, visible, onOpen,
           </div>
         </section>
         <section className="q-lab-principle" id="lab-approach">
-          <p className="q-lab-kicker">The work behind the interface</p>
+          <p className="q-lab-kicker">Research and source code</p>
           <h3>The code and the<br />experiments are public.</h3>
-          <div><p>I publish the code, measurements, and failed approaches so the work can be inspected and repeated.</p><a href={lab.manifestoHref} target="_blank" rel="noreferrer">Read the lab manifesto ↗</a></div>
+          <div><p>I publish code, measurements, and failed approaches so others can inspect and repeat the experiments.</p><a href={lab.manifestoHref} target="_blank" rel="noreferrer">Read the lab manifesto ↗</a></div>
         </section>
-        <button ref={nextRef} className="q-lab-next" type="button" onClick={onNext} aria-controls="github-heading"><span className="q-lab-next-label">Next chapter <span>02 / GitHub activity</span></span><span className="q-lab-next-title">A look behind the commits.</span><span className="q-lab-next-arrow" aria-hidden="true">↓</span></button>
+        <button ref={nextRef} className="q-lab-next" type="button" onClick={onNext} aria-controls="github-heading"><span className="q-lab-next-label">Next chapter <span>02 / GitHub activity</span></span><span className="q-lab-next-title">My GitHub contributions.</span><span className="q-lab-next-arrow" aria-hidden="true">↓</span></button>
         <footer className="q-lab-footer"><span>Shaligram Labs / Kathmandu</span><a href={lab.href} target="_blank" rel="noreferrer">shaligramlabs.vercel.app ↗</a><button type="button" onClick={onClose}>Back to qvost ↑</button></footer>
       </div>
     </div>

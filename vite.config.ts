@@ -6,7 +6,7 @@ export default defineConfig({
   build: {
     rolldownOptions: {
       onLog(level, log, defaultHandler) {
-        // This client-only application does not have a server/client module split.
+        // Client directives are retained in the registry source; this build hydrates static HTML.
         if (log.code === "MODULE_LEVEL_DIRECTIVE" && log.message.includes('"use client"')) return;
         defaultHandler(level, log);
       },

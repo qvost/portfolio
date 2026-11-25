@@ -87,5 +87,5 @@ export function calendarWeeks(days: ContributionDay[]) {
 export function calendarRange(days: ContributionDay[]) {
   const first = days[0];
   const last = days.at(-1);
-  return first && last ? `${rangeFormatter.format(new Date(first.date))} — ${rangeFormatter.format(new Date(last.date))}` : '';
+  return first && last ? `${rangeFormatter.format(new Date(first.date))} to ${rangeFormatter.format(new Date(last.date))}` : '';
 }

@@ -8,8 +8,35 @@ npm install
 npm run dev
 ```
 
-Development uses port 5174. `npm run build` checks TypeScript and writes `dist/`.
+Development uses port 5174. `npm run build` checks TypeScript, builds the app,
+and renders the home and projects pages to HTML in `dist/`.
 `npm run preview` serves the production build on port 4174.
+
+## Search and sharing
+
+The canonical site is `https://qvost.vercel.app/`. The build produces:
+
+- A rendered home page that React hydrates for the interactive portfolio.
+- `/work/`, a projects page with descriptions and ordinary links. It works without JavaScript.
+- `/robots.txt` and `/sitemap.xml`, with the two canonical page URLs.
+- WebSite and Person structured data, page titles, descriptions, and social previews.
+
+`index.html` owns the home metadata and existing Search Console verification tag.
+`scripts/prerender.mjs` generates the HTML and crawl files. `src/WorkIndex.tsx`
+uses the same project data as the interactive page and the no-JavaScript fallback.
+`public/social-card.svg` is the source for the 1200 by 630 PNG sharing image.
+
+If the production domain changes, set `SITE_URL` in the build environment:
+
+```sh
+SITE_URL=https://your-domain.example npm run build
+```
+
+After deployment, confirm ownership in Google Search Console, submit
+`https://qvost.vercel.app/sitemap.xml`, and inspect the home and projects URLs.
+The existing verification tag is preserved; its presence does not confirm that
+verification or indexing has completed. See `docs/seo-audit.md` for the findings,
+Google documentation, and remaining launch steps.
 
 ## Edit the content
 

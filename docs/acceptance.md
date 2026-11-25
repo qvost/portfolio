@@ -1,5 +1,14 @@
 # Acceptance record
 
+## Copy and search pass, November 26
+
+- The landing heading names qvost and describes the work. The GitHub and lab copy uses direct descriptions. The 320px GitHub heading fits after shortening it to "Code and activity."
+- The production build prerenders the home page, then hydrates the existing interactive app. `/work/` and the JavaScript-disabled fallback share the ten projects from `src/portfolio-data.ts`.
+- Canonicals, WebSite and Person data, titles, descriptions, social previews, robots, and sitemap use `https://qvost.vercel.app`. The existing Search Console verification tag is preserved.
+- Local production HTTP inspection returned 200 for home, projects, robots, sitemap, and sharing PNG. Sitemap XML and JSON-LD parsed successfully. Browser hydration reported no errors.
+- The no-JavaScript mobile visit showed the fallback and all ten projects. Desktop and 320px screenshots are under `artifacts/seo-*`.
+- Search Console verification, indexing, and ranking are external follow-up after deployment. See `docs/seo-audit.md`.
+
 Current revision checked November 26, 2026 against the local production preview.
 This replaces the November 25 checks for the initial film-template version.
 

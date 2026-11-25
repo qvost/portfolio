@@ -4,14 +4,14 @@
   "scripts": {
     "dev": "vite",
     "typecheck": "tsc --noEmit",
-    "build": "tsc --noEmit && vite build",
+    "build": "tsc --noEmit && vite build && node scripts/prerender.mjs",
     "preview": "vite preview",
     "assets:sync": "node scripts/sync-assets.mjs",
     "artwork:generate": "node scripts/create-project-artwork.mjs",
     "source:verify": "node scripts/verify-source.mjs"
   },
   "license": "ISC",
-  "description": "Siddid Pandey portfolio, based on Colourist Reel Page",
+  "description": "qvost, Siddid Pandey. Developer in Kathmandu working on tools, systems and AI research.",
   "dependencies": {
     "embla-carousel-react": "^8.6.0",
     "embla-carousel-wheel-gestures": "^8.1.0",
