@@ -1,29 +1,15 @@
-import { defineConfig, loadEnv } from "vite";
-import { defaultAssetBase } from "./components/ui/deadspace-page/page-metadata";
-import { portfolioPages } from "./scripts/portfolio-pages";
+import { defineConfig } from "vite";
 
-export default defineConfig(({ mode }) => {
-  const assetBase = loadEnv(mode, process.cwd(), "VITE_").VITE_ASSET_BASE?.replace(/\/$/, "");
-  return {
-    plugins: [
-      {
-        name: "deadspace-asset-base",
-        transformIndexHtml(html) {
-          return assetBase ? html.replaceAll(defaultAssetBase, assetBase) : html;
-        },
-      },
-      portfolioPages(assetBase || defaultAssetBase),
-    ],
-    build: {
-      rollupOptions: {
-        output: {
-          manualChunks(id) {
-            if (id.includes("node_modules/three")) return "three";
-            if (id.includes("node_modules/gsap") || id.includes("node_modules/lenis")) return "motion";
-            if (id.includes("node_modules/react") || id.includes("node_modules/scheduler")) return "react";
-          },
-        },
+export default defineConfig({
+  server: { host: "0.0.0.0", port: 5174 },
+  preview: { host: "0.0.0.0", port: 4174 },
+  build: {
+    rolldownOptions: {
+      onLog(level, log, defaultHandler) {
+        // This client-only application does not have a server/client module split.
+        if (log.code === "MODULE_LEVEL_DIRECTIVE" && log.message.includes('"use client"')) return;
+        defaultHandler(level, log);
       },
     },
-  };
+  },
 });

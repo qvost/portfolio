@@ -1,3 +1,527 @@
-html,body{margin:0;background:#e30613}#root{min-height:100svh}.initial-boot{height:100svh;display:grid;place-items:center;background:#000;color:#e30613;font:12px monospace;letter-spacing:.12em}
+@font-face {
+  font-family: "Booton Medium";
+  src: url("/assets/colourist-reel-page/booton-medium.woff2") format("woff2");
+  font-display: swap;
+}
 
-.static-portfolio .footer-container { transform: none !important; }
+:root {
+  font-family: "Booton Medium", Arial, sans-serif;
+  color: #121212;
+  background: #fff;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* { box-sizing: border-box; }
+html, body, #root { width: 100%; height: 100%; margin: 0; }
+body { overflow: hidden; }
+#root { height: 100svh; height: 100dvh; }
+noscript main { padding: 40px; max-width: 700px; }
+
+.qvost-portfolio.cr-root {
+  /* Only chapter interiors scroll. Focus must not scroll the translated sheet stack. */
+  overflow: clip;
+  --colour-light-grey: #767676;
+  --pointer-colour: #5862e8;
+  --q-quiet: #707070;
+  --q-ink: #121212;
+}
+
+.qvost-portfolio .cr-home-content { max-width: 670px; padding: 0 24px 36px; gap: 25px; }
+.qvost-portfolio .cr-home-title,
+.qvost-portfolio .cr-home-title * {
+  font-size: clamp(36px, 4.2cqw, 64px);
+  line-height: 1.1;
+  letter-spacing: -0.045em;
+  font-weight: 400;
+  white-space: pre-line;
+}
+.qvost-portfolio .cr-home-title { text-wrap: balance; }
+.qvost-portfolio .cr-home-sub { max-width: 390px; color: var(--q-quiet); white-space: pre-line; line-height: 1.6; font-size: 13px; }
+.qvost-portfolio .cr-colour { transition: color 200ms ease; }
+.qvost-portfolio .cr-logo { top: 20px; padding: 0; gap: 9px; }
+.qvost-portfolio .cr-logo-btn { color: var(--q-ink); font-size: 20px; letter-spacing: -0.9px; }
+.qvost-portfolio .cr-logo-btn::after { content: '.'; color: var(--pointer-colour); }
+.qvost-portfolio .cr-logo-info { gap: 7px; }
+.qvost-portfolio .cr-logo-info * { font-size: 11px; }
+.qvost-portfolio .cr-logo[inert] { opacity: 0; visibility: hidden; }
+.qvost-portfolio .cr-layout { padding: 0 32px; }
+.qvost-portfolio .cr-header > .cr-layout { pointer-events: none !important; }
+.qvost-portfolio .tile-button { border: 1px solid #ebebeb; border-radius: 6px; width: 36px; height: 36px; }
+.qvost-portfolio .cr-navhint { opacity: .8; left: calc(100% + 12px); }
+.qvost-portfolio .cr-navhint[data-left="true"] { left: auto; right: calc(100% + 12px); }
+.qvost-portfolio .cr-info-screen { position: absolute; }
+.qvost-portfolio .cr-info-inner { max-width: 420px; padding: 100px 28px; }
+.qvost-portfolio .cr-info-top { gap: 4px; }
+.qvost-portfolio .cr-info-cell a { text-underline-offset: 3px; }
+.qvost-portfolio .cr-info-desc p { line-height: 1.6; font-size: 14px; }
+.qvost-portfolio .cr-info-desc p span { font-size: inherit; line-height: inherit; }
+.qvost-portfolio .cr-info-footer { gap: 3px; }
+.qvost-portfolio .cr-info-socials { display: flex; gap: 18px; margin-bottom: 24px; }
+.qvost-portfolio .cr-info-socials a { color: var(--q-quiet); text-decoration: none; font-size: 12px; }
+.qvost-portfolio .cr-info-socials a:hover { color: var(--q-ink); }
+
+.qvost-portfolio .cr-projects-inner { width: 100%; }
+.qvost-portfolio .cr-list { overflow: hidden; height: 57cqh; }
+.qvost-portfolio .cr-list { mask-image: linear-gradient(transparent, #000 12%, #000 88%, transparent); }
+.qvost-portfolio .cr-carousel { width: 100%; height: 100%; }
+.qvost-portfolio .cr-carousel > div { height: 100%; overflow: hidden; touch-action: pan-x; }
+.qvost-portfolio .cr-embla-container { padding: 0; gap: 0; }
+.qvost-portfolio .cr-slide { width: 100%; flex: 0 0 12.5%; padding: 0 12px; background: transparent; }
+.qvost-portfolio .cr-slide-content { gap: 9px; }
+.qvost-portfolio .cr-slide-content span { font-size: 20px !important; letter-spacing: -.4px; }
+.qvost-portfolio .cr-slide-content span:nth-child(2) { font-size: 13px !important; letter-spacing: -.1px; }
+.qvost-portfolio .cr-slide[data-center="true"] .cr-tile { border-radius: 2px; }
+.qvost-portfolio .cr-filters { top: 24px; gap: 4px; }
+.qvost-portfolio .cr-filter { font-size: 12px; padding: 0 13px; }
+.qvost-portfolio .cr-grid-pad { padding: 0 13cqw; }
+.qvost-portfolio .cr-grid .cr-lgrid { gap: 38px 20px; }
+.qvost-portfolio .cr-gridwrap { padding: 18cqh 0 12cqh; }
+.qvost-portfolio .cr-grid-card { display: block; text-align: left; width: 100%; }
+.qvost-portfolio .cr-grid-media-inner { border-radius: 5px; }
+.qvost-portfolio .cr-grid-title { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.qvost-portfolio .cr-grid-title span { font-size: 12px; line-height: 18px; }
+.qvost-portfolio .cr-grid-type { font-size: 10px; margin-top: 2px; }
+.qvost-portfolio .cr-grid-description { display: block; }
+.qvost-portfolio .cr-pinfo { gap: 24px; overflow-y: auto; padding: 96px 28px; }
+.qvost-portfolio .cr-pinfo-description { color: #ccc; max-width: 370px; text-align: center; font-size: 14px; line-height: 1.6; }
+.qvost-portfolio .cr-pinfo-links { display: flex; gap: 12px; }
+.qvost-portfolio .cr-pinfo-links a { color: #fff; text-decoration: none; padding: 10px 15px; background: #ffffff12; border: 1px solid #ffffff22; border-radius: 5px; font-size: 12px; transition: background 180ms; }
+.qvost-portfolio .cr-pinfo-links a:hover { background: #ffffff26; }
+
+.qvost-portfolio .q-chrome { position: absolute; inset: 0; z-index: 80; pointer-events: none; color: #707070; transition: color .3s; }
+.qvost-portfolio .q-chrome a, .qvost-portfolio .q-chrome button { pointer-events: auto; color: inherit; text-decoration: none; }
+.qvost-portfolio .q-location { position: absolute; top: 30px; right: 32px; display: flex; gap: 12px; align-items: center; }
+.qvost-portfolio .q-location span, .qvost-portfolio .q-location time { font-size: 11px; line-height: 16px; }
+.qvost-portfolio .q-location .cr-tz { font-size: 11px; line-height: 16px; }
+.qvost-portfolio .q-location-dot { width: 5px; height: 5px; border-radius: 100%; background: var(--pointer-colour); }
+.qvost-portfolio .q-identity { position: absolute; top: 30px; left: 32px; font-size: 11px; line-height: 16px; }
+.qvost-portfolio .q-bottom-left, .qvost-portfolio .q-bottom-right { position: absolute; bottom: 26px; font-size: 11px; line-height: 18px; }
+.qvost-portfolio .q-bottom-left { left: 32px; }
+.qvost-portfolio .q-bottom-right { right: 32px; }
+.qvost-portfolio .q-bottom-left:hover, .qvost-portfolio .q-bottom-right:hover { color: #121212; }
+.qvost-portfolio .q-reel-caption { position: absolute; left: 50%; bottom: 110px; transform: translateX(-50%); white-space: nowrap; color: #707070; font-size: 11px; }
+.qvost-portfolio .q-reel-caption span { color: #999; font-size: inherit; }
+.qvost-portfolio .q-reel-caption:hover { color: #121212; }
+.qvost-portfolio .q-project-action { position: absolute; bottom: 104px; left: 50%; transform: translateX(-50%); display: flex; gap: 18px; white-space: nowrap; }
+.qvost-portfolio .q-project-action a { font-size: 11px; }
+.qvost-portfolio .q-project-action a:hover { color: #121212; }
+.qvost-portfolio .q-project-action[data-dark="true"] a { color: #fff; text-underline-offset: 4px; text-decoration: underline; }
+
+.cr-root .q-cursor-layers { position: absolute; inset: 0; z-index: 1000; pointer-events: none; overflow: hidden; }
+.cr-root .q-cursor-ribbon { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.cr-root .q-cursor-pointer { position: absolute; top: 0; left: 0; opacity: 0; will-change: transform; pointer-events: none; }
+.cr-root .q-cursor-pointer svg { position: absolute; top: -1px; left: -1px; }
+.cr-root .q-cursor-pointer::after { content: attr(data-action); position: absolute; top: 22px; left: 17px; font-size: 10px; color: #777; background: #ffffffd9; border-radius: 3px; padding: 1px 4px; white-space: nowrap; }
+.cr-root .q-cursor-pointer[data-action=""]::after { display: none; }
+.cr-root[data-cursor="active"], .cr-root[data-cursor="active"] * { cursor: none !important; }
+.cr-root :is(button, a, input, [tabindex]):focus-visible { outline: 2px solid #5862e8 !important; outline-offset: 5px; }
+.cr-root [inert], .cr-root [inert] * { pointer-events: none !important; }
+
+@media (min-width: 769px) and (max-height: 630px) {
+  .qvost-portfolio .cr-home-content { gap: 16px; padding-bottom: 60px; }
+  .qvost-portfolio .cr-home-title, .qvost-portfolio .cr-home-title * { font-size: 42px; }
+  .qvost-portfolio .cr-info-inner { max-width: 580px; padding: 80px 40px; }
+  .qvost-portfolio .cr-info-desc p { font-size: 12px; }
+  .qvost-portfolio .cr-info-top, .qvost-portfolio .cr-info-desc, .qvost-portfolio .cr-info-tzrow { margin-bottom: 14px; }
+}
+
+@media (max-width: 768px) {
+  .qvost-portfolio .cr-logo { top: 24px; left: 20px; padding: 0; }
+  .qvost-portfolio .cr-logo-btn { font-size: 21px; }
+  .qvost-portfolio .cr-header { top: 15px; }
+  .qvost-portfolio .cr-layout, .qvost-portfolio .cr-layout-gap { padding: 0 16px; height: auto; gap: 7px; }
+  .qvost-portfolio .cr-header > div { height: auto; top: 0; transform: translateX(-50%); }
+  .qvost-portfolio .cr-navbtn.tile-button { padding: 0 11px; }
+  .qvost-portfolio .cr-home-content { max-width: 550px; gap: 24px; padding: 0 32px 12cqh; }
+  .qvost-portfolio .cr-home-title, .qvost-portfolio .cr-home-title * { font-size: clamp(34px, 6.2cqw, 48px); line-height: 1.13; }
+  .qvost-portfolio .cr-home-sub { max-width: 300px; font-size: 12px; }
+  .qvost-portfolio .q-identity, .qvost-portfolio .q-location { display: none; }
+  .qvost-portfolio .q-bottom-left { left: 20px; bottom: 20px; }
+  .qvost-portfolio .q-bottom-right { right: 20px; bottom: 20px; }
+  .qvost-portfolio .q-reel-caption { bottom: 102px; }
+  .qvost-portfolio .cr-list { height: 68cqh; }
+  .qvost-portfolio .cr-mcarousel { height: 100%; width: 100%; padding-bottom: 0; }
+  .qvost-portfolio .cr-mcarousel > div { height: 100%; overflow: hidden; touch-action: pan-x; }
+  .qvost-portfolio .cr-mslide-content { gap: 7px; }
+  .qvost-portfolio .cr-mslide-content span { font-size: 15px; }
+  .qvost-portfolio .cr-mslide-content span:nth-child(2) { max-width: 180px; font-size: 11px; }
+  .qvost-portfolio .cr-views { display: flex; flex-direction: row; gap: 3px; }
+  .qvost-portfolio .cr-view { width: 30px; height: 32px; }
+  .qvost-portfolio .cr-viewhint { display: none; }
+  .qvost-portfolio .cr-grid-pad { padding: 0 20px; }
+  .qvost-portfolio .cr-gridwrap { padding-top: 110px; }
+  .qvost-portfolio .cr-grid .cr-lgrid { gap: 24px 12px; }
+  .qvost-portfolio .cr-grid-title { flex-direction: column; gap: 0; }
+  .qvost-portfolio .cr-grid-title span:last-child:not(:first-child) { font-size: 10px; }
+  .qvost-portfolio .q-project-action { bottom: 104px; }
+  .qvost-portfolio .cr-info-inner { padding-top: 90px; padding-bottom: 80px; }
+  .qvost-portfolio .cr-info-desc p { font-size: 13px; }
+}
+
+@media (max-width: 550px) {
+  .qvost-portfolio .cr-home-content { padding-bottom: calc(38cqw + 30px); }
+  .qvost-portfolio .cr-home-title, .qvost-portfolio .cr-home-title * { font-size: clamp(30px, 8.2cqw, 44px); }
+  .qvost-portfolio .q-reel-caption { bottom: calc(56.25cqw + 20px); }
+  .qvost-portfolio .q-bottom-left, .qvost-portfolio .q-bottom-right { bottom: calc(56.25cqw + 64px); font-size: 10px; }
+  .qvost-portfolio .cr-list { height: 56cqh; transform: translateY(-12cqh); }
+  .qvost-portfolio .cr-mslide-content { max-width: 87cqw; }
+  .qvost-portfolio .cr-mslide-content span:nth-child(2) { max-width: 160px; }
+  .qvost-portfolio .q-project-action { bottom: calc(56.25cqw + 22px); }
+  .qvost-portfolio .q-project-action[data-dark="true"] { bottom: 19cqh; }
+  .qvost-portfolio .cr-pinfo-description { max-width: 310px; font-size: 13px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; transition-delay: 0ms !important; scroll-behavior: auto !important; }
+  .cr-root .q-cursor-layers { display: none; }
+}
+
+/* The lab continues the original bottom-edge reveal without any film media. */
+.qvost-portfolio .q-reel-caption { bottom: 108px; }
+.qvost-portfolio .q-scroll-arrow { display: block; margin-top: 12px; text-align: center; font-size: 18px; color: #888; }
+.qvost-portfolio {
+  --lab-paper: #e9e7df;
+  --lab-ink: #242923;
+  --lab-quiet: #64685f;
+  --lab-line: #c6c8bb;
+  --lab-accent: #6c7952;
+}
+.qvost-portfolio .q-lab-panel {
+  position: absolute; z-index: 30; top: 0; left: 10cqw; width: 80cqw; height: 100cqh;
+  border-radius: 10px 10px 0 0; overflow: hidden; background: var(--lab-paper); color: var(--lab-ink);
+  transform: translateY(calc(100cqh - 64px));
+  box-shadow: 0 -25px 95px #7c806214;
+  transition: transform 1000ms var(--transition-ease), width 1000ms var(--transition-ease), left 1000ms var(--transition-ease), border-radius 1000ms var(--transition-ease), opacity 400ms;
+  transition-delay: 300ms, 300ms, 300ms, 300ms, 0ms;
+}
+.qvost-portfolio .q-lab-panel[data-visible="false"] { transform: translateY(100cqh); opacity: 0; pointer-events: none; }
+@media (hover: hover) and (pointer: fine) {
+  .qvost-portfolio .q-lab-panel[data-expanded="false"]:hover { transform: translateY(calc(100cqh - 76px)); transition-delay: 0ms; }
+}
+.qvost-portfolio .q-lab-panel[data-expanded="true"] { transform: translateY(0); left: 0; width: 100cqw; border-radius: 0; }
+.qvost-portfolio .q-lab-panel[data-covered="true"] {
+  /* Reverse the opening zoom, then dissolve the paper sheet into the white GitHub chapter. */
+  transform: translateY(-3cqh) scale(.78);
+  opacity: 0;
+  border-radius: 16px;
+  transition-delay: 0ms, 0ms, 0ms, 0ms, 500ms;
+  pointer-events: none;
+}
+.qvost-portfolio .q-lab-panel a { color: inherit; text-decoration: none; }
+.qvost-portfolio .q-lab-panel button { color: inherit; }
+.qvost-portfolio .q-lab-peek { position: absolute; top: 0; left: 0; width: 100%; height: 64px; padding: 0 30px; display: flex; align-items: center; justify-content: space-between; gap: 20px; opacity: 1; transition: opacity 250ms; }
+.qvost-portfolio .q-lab-peek > span { font-size: 13px; letter-spacing: -.15px; }
+.qvost-portfolio .q-lab-peek .q-lab-peek-index { font-size: 10px; color: var(--lab-quiet); }
+.qvost-portfolio .q-lab-peek .q-lab-peek-arrow { font-size: 22px; }
+.qvost-portfolio .q-lab-panel[data-expanded="true"] .q-lab-peek { opacity: 0; pointer-events: none; }
+.qvost-portfolio .q-lab-scroll { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; touch-action: pan-y; opacity: 0; transition: opacity 400ms; }
+.qvost-portfolio .q-lab-panel[data-expanded="true"] .q-lab-scroll { opacity: 1; transition-delay: 450ms; }
+.qvost-portfolio .q-lab-header { height: 88px; padding: 0 4.5cqw; display: flex; align-items: center; justify-content: space-between; gap: 20px; border-bottom: 1px solid var(--lab-line); }
+.qvost-portfolio .q-lab-brand { display: flex; align-items: center; gap: 12px; font-size: 13px; }
+.qvost-portfolio .q-lab-brand img { width: 32px; height: 32px; mix-blend-mode: multiply; }
+.qvost-portfolio .q-lab-header button { display: flex; align-items: center; gap: 24px; color: var(--lab-quiet); font-size: 11px; padding: 12px 0 12px 12px; }
+.qvost-portfolio .q-lab-header button span { font-size: 20px; }
+.qvost-portfolio .q-lab-body { max-width: 1420px; padding: 0 6.7cqw; margin: 0 auto; }
+.qvost-portfolio .q-lab-eyebrow { display: flex; align-items: center; gap: 9px; font-size: 11px; color: var(--lab-quiet); padding-top: 35px; }
+.qvost-portfolio .q-lab-status { width: 5px; height: 5px; border-radius: 50%; background: var(--lab-accent); }
+.qvost-portfolio .q-lab-edition { margin-left: auto; font-size: 10px; }
+.qvost-portfolio .q-lab-hero { min-height: min(660px, 78cqh); display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: center; padding: 60px 0 100px; }
+.qvost-portfolio .q-lab-kicker { font-size: 11px; color: var(--lab-quiet); margin-bottom: 24px; }
+.qvost-portfolio .q-lab-hero h2, .qvost-portfolio .q-lab-hero h2 span { font-size: clamp(52px, 6.7cqw, 100px); line-height: 1; letter-spacing: -.065em; font-weight: 400; }
+.qvost-portfolio .q-lab-hero h2 span { color: var(--lab-accent); }
+.qvost-portfolio .q-lab-intro { max-width: 350px; font-size: 15px; line-height: 1.65; color: var(--lab-quiet); margin-top: 30px; }
+.qvost-portfolio .q-lab-visit { display: inline-flex; align-items: center; gap: 52px; padding-bottom: 9px; border-bottom: 1px solid var(--lab-ink); margin-top: 32px; font-size: 12px; }
+.qvost-portfolio .q-lab-visit span { font-size: 20px; }
+.qvost-portfolio .q-lab-emblem { position: relative; aspect-ratio: 1; width: 100%; max-width: 450px; justify-self: end; display: grid; place-items: center; }
+.qvost-portfolio .q-lab-emblem::before, .qvost-portfolio .q-lab-emblem::after { content: ''; position: absolute; background: var(--lab-line); opacity: .6; }
+.qvost-portfolio .q-lab-emblem::before { width: 100%; height: 1px; }
+.qvost-portfolio .q-lab-emblem::after { width: 1px; height: 100%; }
+.qvost-portfolio .q-lab-emblem > img { width: 69%; height: 69%; object-fit: contain; mix-blend-mode: multiply; z-index: 1; transition: transform 1000ms var(--transition-ease); }
+.qvost-portfolio .q-lab-emblem > img { transform: translate(var(--mark-x, 0px), var(--mark-y, 0px)) rotate(var(--mark-turn, 0deg)); transition: transform 650ms cubic-bezier(.16,1,.3,1); }
+.qvost-portfolio .q-lab-orbit { position: absolute; border: 1px solid var(--lab-line); border-radius: 50%; }
+.qvost-portfolio .q-lab-orbit-outer { inset: 4%; }
+.qvost-portfolio .q-lab-orbit-inner { inset: 13%; border-style: dashed; opacity: .65; }
+.qvost-portfolio .q-lab-coordinate { position: absolute; left: 50%; transform: translateX(-50%); font-size: 9px; color: var(--lab-quiet); background: var(--lab-paper); padding: 4px 8px; white-space: nowrap; }
+.qvost-portfolio .q-lab-coordinate-top { top: 1%; }
+.qvost-portfolio .q-lab-coordinate-bottom { bottom: 1%; }
+.qvost-portfolio .q-lab-emblem-dot { position: absolute; top: 49%; right: 3.2%; width: 7px; height: 7px; border-radius: 50%; background: var(--lab-accent); }
+.qvost-portfolio .q-lab-research { padding: 28px 0 0; border-top: 1px solid var(--lab-line); }
+.qvost-portfolio .q-lab-section-label { display: flex; justify-content: space-between; }
+.qvost-portfolio .q-lab-section-label span { font-size: 10px; color: var(--lab-quiet); }
+.qvost-portfolio .q-lab-research-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 8%; padding: 56px 0; }
+.qvost-portfolio .q-lab-research-copy h3, .qvost-portfolio .q-lab-research-copy h3 span { font-size: clamp(58px, 6cqw, 88px); letter-spacing: -.06em; line-height: 1; }
+.qvost-portfolio .q-lab-research-copy h3 span { color: var(--lab-accent); }
+.qvost-portfolio .q-lab-research-copy > p { font-size: 25px; line-height: 1.25; letter-spacing: -.8px; margin-top: 22px; max-width: 340px; }
+.qvost-portfolio .q-lab-research-copy .q-lab-research-desc { font-size: 13px; line-height: 1.7; letter-spacing: 0; color: var(--lab-quiet); max-width: 320px; }
+.qvost-portfolio .q-lab-links { display: flex; gap: 25px; margin-top: 28px; }
+.qvost-portfolio .q-lab-links a { font-size: 11px; border-bottom: 1px solid var(--lab-line); padding-bottom: 6px; }
+.qvost-portfolio .q-lab-discovery { border: 1px solid var(--lab-line); padding: 24px; border-radius: 3px; }
+.qvost-portfolio .q-lab-discovery-label { font-size: 10px; color: var(--lab-quiet); margin-bottom: 20px; }
+.qvost-portfolio .q-lab-stages { display: flex; gap: 4px; }
+.qvost-portfolio .q-lab-stages button { flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 7px; padding: 12px 9px; border-radius: 2px; font-size: 10px; text-align: left; color: var(--lab-quiet); transition: background 200ms, color 200ms; }
+.qvost-portfolio .q-lab-stages button { position: relative; isolation: isolate; }
+.qvost-portfolio .q-lab-stages .q-stage-index { font-size: 9px; opacity: .6; }
+.qvost-portfolio .q-lab-stages .q-stage-label { font-size: inherit; }
+.qvost-portfolio .q-lab-stages button[aria-selected="true"] { color: var(--lab-paper); }
+.qvost-portfolio .q-lab-stages button:hover:not([aria-selected="true"]) { background: #22291b0a; }
+.qvost-portfolio .q-lab-stages .q-lab-stage-selection { position: absolute; inset: 0; border-radius: 2px; background: var(--lab-ink); z-index: -1; }
+.qvost-portfolio .q-lab-tool-diagram { position: relative; height: 130px; display: flex; justify-content: space-between; align-items: center; margin: 16px 10px; }
+.qvost-portfolio .q-lab-tool-diagram svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.qvost-portfolio .q-lab-tool-diagram path { fill: none; stroke: #919b7a; stroke-width: 1; stroke-dasharray: 4 5; transition: stroke-dashoffset 900ms var(--transition-ease); }
+.qvost-portfolio .q-lab-tool-diagram[data-stage="compile"] path { stroke-dashoffset: -32; }
+.qvost-portfolio .q-lab-tool-diagram[data-stage="capture"] path { stroke-dashoffset: -64; }
+.qvost-portfolio .q-lab-compiler { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); z-index: 1; border: 1px solid var(--lab-ink); background: var(--lab-paper); width: 70px; height: 70px; display: flex; align-items: center; justify-content: center; flex-direction: column; font-size: 33px; line-height: 1; border-radius: 4px; }
+.qvost-portfolio .q-lab-compiler span { font: 9px ui-monospace, monospace; margin-top: 5px; color: var(--lab-quiet); }
+.qvost-portfolio .q-lab-input-lines, .qvost-portfolio .q-lab-output-lines { width: 30px; height: 100px; display: flex; flex-direction: column; justify-content: space-between; z-index: 1; }
+.qvost-portfolio .q-lab-input-lines i, .qvost-portfolio .q-lab-output-lines i { display: block; width: 30px; height: 12px; border: 1px solid #9a9f8d; background: var(--lab-paper); border-radius: 2px; }
+.qvost-portfolio .q-lab-output-lines i { height: 18px; border-color: var(--lab-accent); }
+.qvost-portfolio .q-lab-stage-content { min-height: 138px; }
+.qvost-portfolio .q-lab-stage-flow { display: flex; justify-content: space-between; gap: 8px; }
+.qvost-portfolio .q-lab-stage-flow span { font-size: 9px; color: var(--lab-quiet); }
+.qvost-portfolio .q-lab-stage-content code { display: block; font: 11px ui-monospace, monospace; margin-top: 17px; color: var(--lab-ink); }
+.qvost-portfolio .q-lab-stage-content p { font-size: 11px; line-height: 1.7; color: var(--lab-quiet); margin-top: 12px; }
+.qvost-portfolio .q-lab-system-link { display: inline-block; font-size: 10px; border-bottom: 1px solid var(--lab-line); padding-bottom: 5px; margin-top: 12px; }
+.qvost-portfolio .q-lab-results { border-top: 1px solid var(--lab-line); border-bottom: 1px solid var(--lab-line); padding: 36px 0; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; align-items: center; }
+.qvost-portfolio .q-lab-results strong, .qvost-portfolio .q-lab-results strong span { font-size: clamp(40px, 4.2cqw, 64px); line-height: 1; letter-spacing: -.06em; font-weight: 400; }
+.qvost-portfolio .q-lab-results strong span { font-size: .55em; color: var(--lab-quiet); margin-left: 3px; }
+.qvost-portfolio .q-lab-results p { font-size: 11px; color: var(--lab-quiet); margin-top: 10px; }
+.qvost-portfolio .q-lab-results > a { font-size: 10px; line-height: 1.8; color: var(--lab-quiet); }
+.qvost-portfolio .q-lab-principle { display: grid; grid-template-columns: 1fr 1fr; gap: 30px 8%; padding: 90px 0; }
+.qvost-portfolio .q-lab-principle > .q-lab-kicker { grid-column: 1/-1; margin: 0; }
+.qvost-portfolio .q-lab-principle h3 { font-size: clamp(32px, 3.5cqw, 50px); line-height: 1.15; letter-spacing: -.05em; }
+.qvost-portfolio .q-lab-principle > div { align-self: center; }
+.qvost-portfolio .q-lab-principle p { color: var(--lab-quiet); font-size: 14px; line-height: 1.7; max-width: 340px; }
+.qvost-portfolio .q-lab-principle a { display: inline-block; font-size: 11px; margin-top: 22px; border-bottom: 1px solid var(--lab-line); padding-bottom: 6px; }
+.qvost-portfolio .q-lab-footer { display: flex; gap: 20px; flex-wrap: wrap; align-items: center; justify-content: space-between; border-top: 1px solid var(--lab-line); padding: 30px 0 38px; }
+.qvost-portfolio .q-lab-footer > * { font-size: 10px; color: var(--lab-quiet); }
+.qvost-portfolio .q-lab-next { position: relative; width: 100%; display: grid; grid-template-columns: 1fr auto; text-align: left; gap: 26px; padding: 42px 0; border-top: 1px solid var(--lab-line); }
+.qvost-portfolio .q-lab-next-label { display: flex; gap: 28px; grid-column: 1 / -1; color: var(--lab-quiet); font-size: 11px; }
+.qvost-portfolio .q-lab-next-label > span { font-size: inherit; }
+.qvost-portfolio .q-lab-next-title { font-size: clamp(23px, 3cqw, 42px); line-height: 1.2; letter-spacing: -.035em; }
+.qvost-portfolio .q-lab-next-arrow { font-size: 34px; align-self: center; transition: transform 300ms var(--transition-ease); }
+.qvost-portfolio .q-lab-next:hover .q-lab-next-arrow { transform: translateY(6px); }
+.qvost-portfolio .q-lab-panel a:hover, .qvost-portfolio .q-lab-panel .q-lab-header button:hover, .qvost-portfolio .q-lab-panel .q-lab-footer button:hover { color: #000; }
+
+/* Original project illustrations replace every film cover and player. */
+.qvost-portfolio .cr-grid-media { padding-top: 120%; }
+.qvost-portfolio .cr-grid-media-inner { background: var(--colour-off-white); transition: transform 600ms var(--transition-ease); }
+.qvost-portfolio .cr-grid-media { perspective: 950px; }
+.qvost-portfolio .cr-grid-media-inner { transform: rotateX(var(--surface-rx, 0deg)) rotateY(var(--surface-ry, 0deg)); transition: transform 500ms cubic-bezier(.16,1,.3,1); }
+.qvost-portfolio .cr-grid-media-inner::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at var(--surface-x, 50%) var(--surface-y, 50%), #fff1, transparent 65%); opacity: 0; transition: opacity 200ms; }
+.qvost-portfolio .cr-grid-card[data-pointer-active] .cr-grid-media-inner::after { opacity: 1; }
+.qvost-portfolio .cr-grid-media-inner img { object-fit: contain; }
+.qvost-portfolio .q-project-details { padding: 100px 11cqw; justify-content: flex-start; }
+.qvost-portfolio .q-project-detail-grid { width: 100%; max-width: 1000px; margin: auto; display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 8%; }
+.qvost-portfolio .q-project-cover { width: 100%; height: auto; border: 1px solid #ffffff14; border-radius: 5px; max-height: 76cqh; object-fit: contain; }
+.qvost-portfolio .q-project-category { color: #888; font-size: 10px; text-transform: capitalize; margin-bottom: 22px; }
+.qvost-portfolio .q-project-heading { font-size: clamp(32px, 4cqw, 60px); line-height: 1.1; letter-spacing: -.05em; color: #eee; }
+.qvost-portfolio .q-project-focus { font-size: 16px; color: #aaa; margin-top: 12px; }
+.qvost-portfolio .q-project-copy .cr-pinfo-description { text-align: left; font-size: 14px; color: #aaa; margin-top: 25px; }
+.qvost-portfolio .q-project-stack { font-size: 10px; color: #666; margin: 22px 0; }
+.qvost-portfolio .q-project-stack span { font-size: inherit; color: #bbb; margin-left: 8px; }
+.qvost-portfolio .q-project-author { color: #666; font-size: 10px; margin-top: 32px; }
+.qvost-portfolio .q-project-action { bottom: 70px; }
+
+@media (max-width: 768px) {
+  .qvost-portfolio .q-lab-panel { width: calc(100cqw - 32px); left: 16px; }
+  .qvost-portfolio .q-lab-panel[data-expanded="true"] { left: 0; width: 100cqw; }
+  .qvost-portfolio .q-lab-peek { padding: 0 20px; }
+  .qvost-portfolio .q-lab-peek .q-lab-peek-index { font-size: 9px; }
+  .qvost-portfolio .q-lab-peek > span { font-size: 12px; }
+  .qvost-portfolio .q-reel-caption { bottom: 103px; }
+  .qvost-portfolio .q-bottom-left, .qvost-portfolio .q-bottom-right { bottom: 145px; }
+  .qvost-portfolio .cr-home-content { padding: 0 28px 100px; }
+  .qvost-portfolio .cr-list { height: 68cqh; transform: none; }
+  .qvost-portfolio .q-project-action { bottom: 70px; }
+  .qvost-portfolio .q-lab-header { height: 76px; padding: 0 22px; }
+  .qvost-portfolio .q-lab-header button { gap: 10px; font-size: 10px; }
+  .qvost-portfolio .q-lab-brand { font-size: 12px; gap: 8px; }
+  .qvost-portfolio .q-lab-brand img { width: 27px; height: 27px; }
+  .qvost-portfolio .q-lab-body { padding: 0 25px; }
+  .qvost-portfolio .q-lab-eyebrow { padding-top: 28px; font-size: 10px; }
+  .qvost-portfolio .q-lab-edition { display: none; }
+  .qvost-portfolio .q-lab-hero { grid-template-columns: 1fr; min-height: 0; padding: 55px 0 60px; gap: 42px; }
+  .qvost-portfolio .q-lab-hero h2, .qvost-portfolio .q-lab-hero h2 span { font-size: clamp(48px, 10cqw, 76px); }
+  .qvost-portfolio .q-lab-kicker { margin-bottom: 20px; }
+  .qvost-portfolio .q-lab-intro { font-size: 13px; max-width: 370px; margin-top: 25px; }
+  .qvost-portfolio .q-lab-emblem { width: min(80cqw, 340px); justify-self: center; }
+  .qvost-portfolio .q-lab-research-grid { grid-template-columns: 1fr; gap: 38px; padding: 38px 0; }
+  .qvost-portfolio .q-lab-research-copy h3, .qvost-portfolio .q-lab-research-copy h3 span { font-size: 66px; }
+  .qvost-portfolio .q-lab-research-copy > p { font-size: 24px; }
+  .qvost-portfolio .q-lab-research-copy .q-lab-research-desc { font-size: 13px; }
+  .qvost-portfolio .q-lab-discovery { padding: 20px 15px; }
+  .qvost-portfolio .q-lab-stages button { font-size: 9px; padding: 10px 7px; }
+  .qvost-portfolio .q-lab-results { grid-template-columns: 1fr 1fr; gap: 28px 16px; padding: 30px 0; }
+  .qvost-portfolio .q-lab-results strong { font-size: 48px; }
+  .qvost-portfolio .q-lab-results > a { grid-column: 1/-1; }
+  .qvost-portfolio .q-lab-principle { grid-template-columns: 1fr; padding: 60px 0; gap: 25px; }
+  .qvost-portfolio .q-lab-principle h3 { font-size: 36px; }
+  .qvost-portfolio .q-lab-principle p { font-size: 13px; }
+  .qvost-portfolio .q-lab-footer { flex-direction: column; align-items: flex-start; gap: 17px; }
+  .qvost-portfolio .q-project-details { padding: 95px 25px 55px; }
+  .qvost-portfolio .q-project-detail-grid { grid-template-columns: 1fr; max-width: 450px; gap: 35px; }
+  .qvost-portfolio .q-project-cover { max-height: 54cqh; }
+  .qvost-portfolio .q-project-heading { font-size: 40px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qvost-portfolio .q-lab-panel, .qvost-portfolio .q-lab-scroll { transition: none; }
+  .qvost-portfolio .q-lab-emblem:hover > img { transform: none; }
+}
+
+/* Pointer, contact, and lab navigation refinements. */
+.qvost-portfolio .q-contact-trigger { display: inline-flex; align-items: center; gap: 15px; padding: 9px 0 9px 9px; color: #686868; font-size: 11px; }
+.qvost-portfolio .q-contact-trigger > span { font-size: 16px; width: 10px; }
+.qvost-portfolio .q-contact-panel { position: absolute; bottom: calc(100% + 12px); right: 0; width: min(310px, calc(100cqw - 40px)); padding: 20px; border: 1px solid #e7e7e7; border-radius: 8px; background: #fff; box-shadow: 0 10px 45px #0000000c; pointer-events: auto; transform-origin: bottom right; }
+.qvost-portfolio .q-contact-heading { display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+.qvost-portfolio .q-contact-heading p { font-size: 13px; color: #222; letter-spacing: -.2px; }
+.qvost-portfolio .q-contact-heading button { width: 28px; height: 28px; margin: -8px -8px -8px 0; color: #777; font-size: 20px; }
+.qvost-portfolio .q-contact-note { font-size: 11px; color: #888; margin: 6px 0 20px; }
+.qvost-portfolio .q-contact-address { display: flex; align-items: center; gap: 5px; padding: 6px 5px 6px 10px; background: #f5f5f4; border: 1px solid #ececea; border-radius: 4px; }
+.qvost-portfolio .q-contact-address input { width: 100%; min-width: 0; font-size: 12px; line-height: 20px; color: #555; pointer-events: auto; }
+.qvost-portfolio .q-copy-control { position: relative; display: flex; flex: 0 0 30px; }
+.qvost-portfolio .q-copy-button { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 3px; color: #666; transition: background 120ms, color 120ms; }
+.qvost-portfolio .q-copy-button:hover { background: #e6e6e3; color: #222; }
+.qvost-portfolio .q-copy-control[data-status="copied"] .q-copy-button { color: #52723c; }
+.qvost-portfolio .q-copy-feedback { position: absolute; right: 0; bottom: calc(100% + 12px); white-space: nowrap; color: #555; background: #fff; border-radius: 3px; font-size: 10px; line-height: 18px; }
+.qvost-portfolio .q-copy-feedback:not(:empty) { padding: 2px 7px; border: 1px solid #e7e7e7; }
+.qvost-portfolio .q-contact-mail { display: flex; justify-content: space-between; margin-top: 17px; font-size: 11px; color: #666; }
+.qvost-portfolio .q-contact-mail:hover, .qvost-portfolio .q-contact-trigger:hover { color: #111; }
+
+.qvost-portfolio .q-lab-header { position: sticky; top: 0; z-index: 5; background: var(--lab-paper); }
+.qvost-portfolio .q-lab-reading-progress { position: absolute; bottom: -1px; left: 0; width: 100%; height: 2px; background: var(--lab-accent); transform: scaleX(var(--lab-progress, 0)); transform-origin: left; pointer-events: none; }
+.qvost-portfolio .q-lab-emblem { cursor: pointer; }
+.qvost-portfolio .q-mark-field { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.qvost-portfolio .q-mark-field circle { fill: var(--lab-accent); opacity: .1; transition: transform 600ms cubic-bezier(.16,1,.3,1), opacity 300ms; }
+.qvost-portfolio .q-lab-emblem[data-pointer-active] .q-mark-field circle { transition-duration: 160ms; }
+.qvost-portfolio .q-lab-coordinate { z-index: 2; }
+.qvost-portfolio .q-mark-hover-label { position: absolute; inset: 4px 0; opacity: 0; transform: translateY(4px); }
+.qvost-portfolio .q-mark-rest-label, .qvost-portfolio .q-mark-hover-label { font-size: inherit; line-height: inherit; transition: opacity 180ms, transform 180ms; }
+.qvost-portfolio .q-lab-emblem:is(:hover, :focus-visible) .q-mark-hover-label { opacity: 1; transform: translateY(0); }
+.qvost-portfolio .q-lab-emblem:is(:hover, :focus-visible) .q-mark-rest-label { opacity: 0; }
+.qvost-portfolio .q-lab-navigation { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); z-index: 8; display: flex; flex-direction: column; opacity: 0; pointer-events: none; transition: opacity 200ms 0ms; }
+.qvost-portfolio .q-lab-navigation[data-active="true"] { opacity: 1; pointer-events: auto; transition-delay: 1100ms; }
+.qvost-portfolio .q-lab-navigation button { display: flex; align-items: center; justify-content: flex-end; gap: 8px; min-height: 36px; min-width: 42px; color: var(--lab-quiet); }
+.qvost-portfolio .q-chapter-tick { width: 9px; height: 1px; background: currentColor; opacity: .4; transition: width 180ms, opacity 180ms; }
+.qvost-portfolio .q-lab-navigation [aria-current] .q-chapter-tick { width: 20px; opacity: 1; color: var(--lab-accent); }
+.qvost-portfolio .q-chapter-label { font-size: 9px; opacity: 0; transform: translateX(4px); transition: opacity 150ms, transform 150ms; padding: 3px 5px; border-radius: 2px; background: var(--lab-paper); }
+.qvost-portfolio .q-lab-navigation button:is(:hover, :focus-visible) .q-chapter-label { opacity: 1; transform: translateX(0); }
+.qvost-portfolio .q-chapter-number { font: 8px ui-monospace, monospace; opacity: .5; }
+.qvost-portfolio .q-lab-navigation [aria-current] .q-chapter-number { opacity: 1; }
+
+@media (max-width: 768px) {
+  .qvost-portfolio .q-lab-navigation { top: auto; bottom: max(18px, env(safe-area-inset-bottom)); right: 50%; transform: translateX(50%); flex-direction: row; gap: 4px; padding: 5px; background: var(--lab-paper); border: 1px solid var(--lab-line); border-radius: 6px; box-shadow: 0 3px 20px #22291b0a; }
+  .qvost-portfolio .q-lab-navigation button { gap: 7px; padding: 0 10px; min-height: 34px; }
+  .qvost-portfolio .q-chapter-label { opacity: .6; transform: none; padding: 0; }
+  .qvost-portfolio .q-lab-navigation [aria-current] .q-chapter-label { opacity: 1; }
+  .qvost-portfolio .q-chapter-tick { display: none; }
+  .qvost-portfolio .q-chapter-number { font-size: 7px; }
+  .qvost-portfolio .q-lab-footer { padding-bottom: 100px; }
+  .qvost-portfolio .q-contact-address input { font-size: 16px; }
+}
+
+/* ══ Eye tracker ═══════════════════════════════════════════
+   See lab/Watcher.tsx. The frame holds the largest ball the
+   Size knob allows, so the wall never rescales it. */
+/* Bencho's tokens map directly to this portfolio's existing values:
+   --bg → --colour-white; --card and --fill-slab → --colour-off-white;
+   --fill-on and --ink → --q-ink; --font-ui → --font-booton.
+   These rules are component-scoped; no Bencho globals are introduced. */
+.qvost-portfolio .eyt {
+  width: 200px;
+  height: 200px;
+  display: grid;
+  place-items: center; }
+
+.qvost-portfolio .eyt-ball {
+  width: var(--eyt-size, 100px);
+  height: var(--eyt-size, 100px);
+  overflow: visible; }
+
+/* the ball is the Fill's own slab and the eyes its ink: white
+   with dark eyes on a light fill, near-black with light eyes on
+   a dark one */
+.qvost-portfolio .eyt-body { fill: var(--colour-off-white, #f2f2f2); }
+
+.qvost-portfolio .eyt-eye { fill: var(--q-ink, #121212); }
+
+/* a press on the toy opens a chat bubble off its lower right: the
+   pet's bubble, its square corner pointing back at the face */
+.qvost-portfolio .eyt { position: relative; }
+
+/* a press gives a little under the finger and springs back out */
+.qvost-portfolio .eyt-ball[data-poke] {
+  cursor: pointer;
+  transform-origin: center;
+  transition: scale 420ms cubic-bezier(0.24, 1.34, 0.38, 1);
+  -webkit-tap-highlight-color: transparent; }
+
+.qvost-portfolio .eyt-ball[data-poke]:active { scale: 0.96; transition-duration: 160ms; transition-timing-function: ease; }
+
+.qvost-portfolio .eyt-say {
+  position: absolute;
+  left: calc(50% + var(--eyt-size, 100px) * 0.36);
+  top: calc(50% + var(--eyt-size, 100px) * 0.3);
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-height: 34px;
+  padding: 0 16px;
+  border-radius: 6px 14px 14px 14px;
+  background: var(--tint, #3b5bff);
+  box-shadow: inset 0 -1.5px 0 rgba(0, 0, 0, 0.1);
+  color: #ffffff;
+  font-family: var(--font-booton);
+  font-size: 13px;
+  font-weight: 400;
+  white-space: nowrap;
+  transform-origin: top left;
+  opacity: 0;
+  scale: 0.85;
+  pointer-events: none;
+  transition: opacity 160ms ease, scale 220ms cubic-bezier(0.24, 1.34, 0.38, 1), background-color 220ms ease;
+  letter-spacing: 0em; }
+
+.qvost-portfolio .eyt-say[data-on] { opacity: 1; scale: 1; }
+
+.qvost-portfolio .eyt-caret {
+  width: 1.5px;
+  height: 13px;
+  border-radius: 1px;
+  background: var(--colour-off-white, var(--colour-white));
+  animation: pet-caret 1s steps(1) infinite; }
+
+.qvost-portfolio .logo-test .eyt { width: auto; height: auto; }
+
+.qvost-portfolio .logo-test .eyt-body { fill: var(--q-ink); }
+
+.qvost-portfolio .logo-test .eyt-eye { fill: var(--colour-white); }
+
+/* the circle and pill in dark mode match the hexagon: a lifted
+   dark body with the eyes kept white */
+[data-theme="dark"] .qvost-portfolio .logo-test .eyt-body { fill: #2b2c30; /* the hexagon's body; site chrome, not a block: keep off the system snap */ }
+
+[data-theme="dark"] .qvost-portfolio .logo-test .eyt-eye { fill: #fbfbfa; }
+
+.qvost-portfolio .bench-lock-face .eyt { position: relative; width: 96px; height: 96px; }
+
+.qvost-portfolio .bench-lock-face .eyt-body { fill: transparent; }
+
+.qvost-portfolio .bench-lock-face .eyt-eye { fill: #fff; }
+
+@keyframes pet-caret {
+  50% { opacity: 0; } }
+
+/* The information screen uses the same toy in a compact frame. */
+.qvost-portfolio .q-info-companion { flex: 0 0 auto; margin-bottom: 14px; }
+.qvost-portfolio .q-info-companion .eyt { height: 140px; }
+.qvost-portfolio .cr-info-screen { justify-content: safe center; }
+.qvost-portfolio .eyt-say > span { font-size: inherit; line-height: inherit; }
+.qvost-portfolio .eyt-say:not([data-on]) .eyt-caret { animation: none; }
+
+@media (max-width: 550px) {
+  .qvost-portfolio .q-info-companion { margin-bottom: 28px; }
+  .qvost-portfolio .eyt-say { left: 50%; top: calc(50% + var(--eyt-size, 100px) * .5 + 8px); translate: -50% 0; transform-origin: top center; }
+}
+
