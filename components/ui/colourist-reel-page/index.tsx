@@ -1071,7 +1071,9 @@ function HomeScreen({
         }}
       >
         <h1 className="cr-home-title">
-          {site.name}, a <ColourTitle>{site.role}</ColourTitle> {site.titleSuffix}
+          {site.homeTitle ?? <>
+            {site.name}, a <ColourTitle>{site.role}</ColourTitle> {site.titleSuffix}
+          </>}
         </h1>
         <p className="cr-home-sub">{site.subTitle}</p>
         <a className="q-work-index-link" href="/work/">Browse projects </a>

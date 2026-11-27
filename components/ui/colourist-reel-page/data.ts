@@ -26,6 +26,8 @@ export interface ColouristProject {
 export interface ColouristSite {
   socials?: { label: string; href: string }[];
   name: string;
+  /** Optional identity-first heading for the home screen. */
+  homeTitle?: string;
   email: string;
   instagramUrl: string;
   instagramHandle: string;

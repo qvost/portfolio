@@ -6,7 +6,7 @@ export function WorkIndex() {
     <header><a href="/" aria-label="qvost portfolio home">qvost</a><a href={`mailto:${portfolioSite.email}`}>Get in touch</a></header>
     <section className="work-intro">
       <p>Siddid Pandey / Kathmandu, Nepal</p>
-      <h1>Projects by qvost.</h1>
+      <h1>Projects by Siddid Pandey.</h1>
       <p>I build tools and systems with Rust, React and TypeScript. At <a href="https://shaligramlabs.vercel.app/">Shaligram Labs</a>, I work on infrastructure for AI agents.</p>
       <nav aria-label="Profile links"><a href="https://github.com/qvost">GitHub</a><a href="https://www.linkedin.com/in/qvost/">LinkedIn</a><a href="https://x.com/qvostlost">X</a></nav>
     </section>

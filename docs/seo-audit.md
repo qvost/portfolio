@@ -1,6 +1,6 @@
 # qvost search audit
 
-November 26, 2026. Canonical site: https://qvost.vercel.app/.
+November 27, 2026. Canonical site: https://qvost.vercel.app/.
 Scope: the portfolio, projects page, generated HTML, crawl files, and sharing metadata.
 Sources: the Google SEO skill's offline documentation and the official pages linked below.
 
@@ -17,7 +17,7 @@ Sources: the Google SEO skill's offline documentation and the official pages lin
 
 - Severity: Medium. Fixed in source and generated HTML.
 - Affected: `/`, `index.html`, `src/portfolio-data.ts`.
-- Evidence: The main heading starts with qvost. The title names qvost, Siddid Pandey, the role, and Kathmandu. WebSite markup names qvost. The Person entity connects Siddid Pandey to the visible GitHub, LinkedIn, and X profiles. Existing Search Console verification is preserved.
+- Evidence: The home title and H1 now start with Siddid Pandey, followed by the qvost brand and developer role. The projects page H1 names Siddid Pandey. WebSite markup names qvost, and the Person entity identifies Siddid Pandey as qvost with a description, Kathmandu location, and matching public profiles. Existing Search Console verification is preserved.
 - Why it matters: Descriptive titles explain the page. Consistent home-page text and WebSite markup help Google understand the preferred site name. They do not force a particular result title or site name.
 - Doc: "Influencing your title links in search results". https://developers.google.com/search/docs/appearance/title-link (local: `docs/search/docs/appearance/title-link.md`).
 - Doc: "Provide a site name to Google Search". https://developers.google.com/search/docs/appearance/site-names (local: `docs/search/docs/appearance/site-names.md`).
@@ -51,18 +51,18 @@ Sources: the Google SEO skill's offline documentation and the official pages lin
 - Doc: "Control your snippets in search results" covers the separate role of search descriptions. https://developers.google.com/search/docs/appearance/snippet (local: `docs/search/docs/appearance/snippet.md`).
 - Recommendation: Keep preview copy aligned with the site. If the domain changes, update the SVG's printed address and export the PNG again.
 
-## Finding: Production indexing needs confirmation after deployment
+## Finding: Search indexing and ranking need Search Console confirmation
 
-- Severity: High. External follow-up.
+- Severity: Medium. External follow-up.
 - Affected: The deployed site and its Google Search Console property.
-- Evidence: The existing public home page returned HTTP 200 without an X-Robots-Tag header during this pass. That was the previously deployed site. The updated local production preview served both pages, robots, sitemap, and sharing image successfully. Search Console account state, Google's selected canonical, and indexing status were unavailable in this workspace.
-- Why it matters: Local changes take effect after deployment. Google decides whether and when to index a URL and where to rank it. A verification token alone does not prove ownership verification has completed.
+- Evidence: The live home and `/work/` both return HTTP 200, expose rendered HTML and self-referencing canonicals, and the live robots file references a sitemap containing both URLs. The page includes a Search Console verification token. A public exact-name search lookup surfaced LinkedIn and a Bevel Creatives team page, but not this portfolio; that lookup cannot confirm Google's index state or position. Search Console data was unavailable in this workspace.
+- Why it matters: Crawlability does not confirm indexing, and indexing does not guarantee a particular ranking. Google chooses when to recrawl and how to rank a page.
 - Doc: "Ask Google to recrawl your URLs". https://developers.google.com/search/docs/crawling-indexing/ask-google-to-recrawl (local: `docs/search/docs/crawling-indexing/ask-google-to-recrawl.md`).
 - Doc: "SEO Starter Guide". https://developers.google.com/search/docs/fundamentals/seo-starter-guide (local: `docs/search/docs/fundamentals/seo-starter-guide.md`).
-- Recommendation: After deploying, confirm ownership in Search Console, submit `https://qvost.vercel.app/sitemap.xml`, and inspect the home and projects URLs. Check their live rendered HTML and request indexing. Track impressions and clicks for `qvost`. Link to this portfolio from the user's GitHub and other public profiles where appropriate. No first-place ranking or indexing deadline is promised.
+- Recommendation: After publishing these changes, confirm ownership in Search Console, submit `https://qvost.vercel.app/sitemap.xml`, inspect the home and projects URLs, and request indexing for the home URL. Add the portfolio URL to public profiles such as GitHub and LinkedIn, then track impressions and average position for the exact query `Siddid Pandey`. No first-place ranking or indexing deadline is promised.
 
-## Verification and copy
+## Verification
 
-TypeScript and the production build pass. HTTP inspection confirmed the rendered home, ten projects, matching canonicals and sitemap, preserved verification tag, valid JSON-LD syntax, valid sitemap XML, and PNG response in the local preview. This is not a Google Rich Results or Search Console validation.
+The November 27 production build passes. Inspection of `dist/` confirmed the name-first title and H1 on both pages, self-referencing canonicals, valid home-page JSON-LD, and both URLs in the sitemap. The live site has not been updated with these changes yet. This is not a Google Rich Results or Search Console validation.
 
-Browser inspection covered desktop and 320px layouts, hydration, chapter navigation, and a JavaScript-disabled visit. Screenshots are in the ignored `artifacts/` directory. The copy pass replaces vague slogans with descriptions of the work. Supplied component comments and vendor attribution remain intact.
+The earlier browser inspection covered desktop and 320px layouts, hydration, chapter navigation, and a JavaScript-disabled visit. Screenshots are in the ignored `artifacts/` directory. The copy pass replaces vague slogans with descriptions of the work. Supplied component comments and vendor attribution remain intact.

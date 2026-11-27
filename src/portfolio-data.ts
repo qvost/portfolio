@@ -2,6 +2,7 @@ import type { ColouristProject, ColouristSite } from '../components/ui/colourist
 
 export const portfolioSite = {
   name: 'qvost',
+  homeTitle: 'Siddid Pandey, developer in Kathmandu',
   email: 'qvostwon@gmail.com',
   instagramUrl: 'https://github.com/qvost',
   instagramHandle: 'GitHub',
@@ -9,7 +10,7 @@ export const portfolioSite = {
   timezone: 'Asia/Kathmandu',
   role: 'developer',
   titleSuffix: 'building tools and systems.',
-  subTitle: 'Siddid Pandey, based in Kathmandu, Nepal.\nRust, React and independent AI research at Shaligram Labs.',
+  subTitle: 'Based in Kathmandu, Nepal.\nRust, React and independent AI research at Shaligram Labs.',
   description: "I'm Siddid, a developer who goes by qvost.\n\nI work on deterministic systems and infrastructure for agents at Shaligram Labs. I also make tools for everyday life and websites with custom motion and interaction.\n\nMost of my systems code is Rust. On the web, I work with React and TypeScript.\n\nHave something in mind? Write to me.",
   featuredLogos: [],
   builtBy: { label: 'qvost', href: 'https://github.com/qvost' },

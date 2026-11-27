@@ -28,8 +28,8 @@ try {
     .replace(/\s*<script type="module"[^>]*><\/script>/g, '')
     .replace(/\s*<link rel="stylesheet"[^>]*>/g, '')
     .replace(/\s*<script type="application\/ld\+json">[\s\S]*?<\/script>/, '')
-    .replaceAll('qvost | Siddid Pandey, developer in Kathmandu', 'Projects by qvost | Siddid Pandey')
-    .replaceAll('Siddid Pandey, known as qvost. Developer in Kathmandu, Nepal, building tools and systems with Rust, React and TypeScript. Independent AI research at Shaligram Labs.', 'Projects by qvost, Siddid Pandey: Statis, Strata, Reify, Vecta and tools for everyday life. Descriptions, live sites and source code.')
+    .replaceAll('Siddid Pandey | qvost, developer in Kathmandu', 'Siddid Pandey | Projects by qvost')
+    .replaceAll('Siddid Pandey, known as qvost. Developer in Kathmandu, Nepal, building tools and systems with Rust, React and TypeScript. Independent AI research at Shaligram Labs.', 'Projects by Siddid Pandey (qvost): Statis, Strata, Reify, Vecta and tools for everyday life. Descriptions, live sites and source code.')
     .replaceAll(`${origin}/"`, `${origin}/work/"`);
   await mkdir(resolve('work/'), { recursive: true });
   await writeFile(resolve('footer.css'), await readFile(new URL('../components/ui/portfolio-footer.css', import.meta.url), 'utf8'));
