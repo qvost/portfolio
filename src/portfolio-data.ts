@@ -23,6 +23,12 @@ export const portfolioSite = {
 
 const work = [
   {
+    slug: 'reify', client: 'Reify', title: 'Infrastructure for agents', type: 'systems',
+    tileColor: '#a163ad',
+    description: 'Discovers website APIs and exposes them as typed MCP tools through a local Rust gateway. Supports saved profiles, live discovery, and streaming requests.',
+    stack: 'Rust / MCP', href: 'https://shaligramlabs.vercel.app/',
+  },
+  {
     slug: 'statis', client: 'Statis', title: 'Deterministic execution', type: 'systems',
     tileColor: '#e06641',
     description: 'Runs unmodified Linux binaries with seeded randomness and a virtual clock to make execution reproducible.',
@@ -35,16 +41,16 @@ const work = [
     stack: 'C++ / Python', href: 'https://strata-research.vercel.app/',
   },
   {
-    slug: 'reify', client: 'Reify', title: 'Infrastructure for agents', type: 'systems',
-    tileColor: '#a163ad',
-    description: 'Compiles live web requests into typed MCP tools that an agent can call for a specific task.',
-    stack: 'Rust / MCP', href: 'https://shaligramlabs.vercel.app/',
-  },
-  {
     slug: 'vecta', client: 'Vecta', title: 'Binary analysis', type: 'systems',
     tileColor: '#62957e',
     description: 'Compares compiled binaries for section growth, symbol changes, and runtime requirements. Includes a command-line tool, CI checks, and a web report viewer.',
     stack: 'Rust / CI', href: 'https://vecta-gate.vercel.app/',
+  },
+  {
+    slug: 'lab-notes', client: 'Lab Notes', title: 'Systems research notebook', type: 'systems',
+    tileColor: '#74815e',
+    description: 'My engineering notebook at Shaligram Labs. Notes on Linux internals, concurrent queues, vector search, and memory layout, with small Rust and C implementations.',
+    stack: 'Rust / C / Linux', href: 'https://github.com/qvost/lab-notes#readme',
   },
   {
     slug: 'hisaab', client: 'Hisaab', title: 'Invoicing & records', type: 'web',
@@ -71,6 +77,12 @@ const work = [
     stack: 'Python / Linux', href: 'https://github.com/qvost/nitro-fan#readme',
   },
   {
+    slug: 'hana-one', client: 'Hana One', title: 'Sound & interaction', type: 'experiments',
+    tileColor: '#b78589',
+    description: 'A ceramic speaker concept with a cherry blossom grille. Turn the speaker, change its finish, and play original listening sketches made with Web Audio.',
+    stack: 'TypeScript / Web Audio / Sakuga', href: 'https://hana-one-blossom.vercel.app/',
+  },
+  {
     slug: 'seedhemaut-tribute', client: 'Seedhe Maut', title: 'Music & interaction', type: 'experiments',
     tileColor: '#b36544',
     description: 'A tribute to Seedhe Maut with scroll-driven discography, searchable tracklists, and album artwork. Built with React and GSAP.',
@@ -80,7 +92,7 @@ const work = [
     slug: 'sonafi-site', client: 'Sanofi study', title: 'Website concept', type: 'experiments',
     tileColor: '#9673b6',
     description: 'An independent Sanofi website concept, executive pitch, and research dossier. Includes clinical-program filters, search, and a film dialog.',
-    stack: 'React / TypeScript', href: 'https://github.com/qvost/sonafi-site#readme',
+    stack: 'React / TypeScript', href: 'https://sonafi.vercel.app/',
   },
 ] satisfies Array<{
   slug: string; client: string; title: string; type: ColouristProject['type'];
@@ -96,3 +108,5 @@ export const portfolioProjects: ColouristProject[] = work.map(project => ({
     { role: 'Code & design', title: 'Siddid Pandey', link: 'https://github.com/qvost' },
   ],
 }));
+
+export const selectedPortfolioProjects = portfolioProjects.filter(project => project.slug !== 'hana-one');

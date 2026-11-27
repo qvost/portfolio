@@ -130,3 +130,32 @@ The hit area remains stationary. Pointer writes are coalesced into one frame,
 with no permanent animation loop. Leaving the page, going offscreen, hiding the
 tab, or enabling reduced motion cancels motion. Reduced motion retains the
 text reply. Entry focus does not override a control already used by the visitor.
+
+## November 28 project update
+
+The collection now includes Hana One and Lab Notes. Their descriptions come from
+the repositories' current READMEs, checked on November 28, 2026:
+[Hana One](https://github.com/qvost/hana-one) and
+[Lab Notes](https://github.com/qvost/lab-notes). Reify's description now names its
+local Rust gateway, and the Sanofi concept links to its published demo.
+
+The new covers use the existing paper, ink, and green palette. Hana One has a
+ceramic speaker with a flower grille and a muted pink accent. Lab Notes has a
+spiral notebook containing a queue and a search graph. The artwork generator
+reproduces all twelve covers without a drawing library.
+
+The selected-projects page has a circular engraving with one petal per selected project.
+Selecting a name traces its petal and replaces the adjacent description and
+links. The radios own selection and keyboard navigation. CSS follows their
+checked state, so the prerendered page works without JavaScript. SVG `pathLength`
+normalizes each outline for the drawing transition. Another selection retargets
+the active transitions immediately. Reduced motion removes transitions, including
+when the preference changes while the page is open. Hidden descriptions use
+`display: none`, which also removes their links from keyboard navigation.
+
+The landing page retains its layout from before this update. It has no recent
+project strip or recency labels. Reify leads the selected collection and opens
+the engraving by default. Hana One appears in the P project browser and full
+work archive, and is excluded from the selected-projects engraving.
+Booton and the existing chapter transitions continue the current design.
+The constellation has no timer, frame loop, or new package dependency.

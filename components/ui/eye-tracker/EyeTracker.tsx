@@ -88,18 +88,26 @@ const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
    holds it to be read, and folds it away. Never the same line
    twice running. */
 const LINES = [
-  "Hey, I see you.",
-  "Boop.",
-  "That tickles.",
-  "Hi there!",
-  "Stop poking me.",
-  "I'm watching you.",
-  "Again? Okay.",
-  "You found me.",
+  "You had me at boop.",
+  "I'm shaped like a friend.",
+  "I have excellent corners.",
+  "My brain is one pixel.",
+  "I put the soft in software.",
+  "All this code, no snacks.",
+  "I'm doing my square best.",
+  "I was promised snacks.",
+  "I ate a bug for you.",
+  "I run on tiny compliments.",
+  "That was a tiny hug.",
+  "Even my bugs are tiny.",
+  "Do I get a tiny salary?",
+  "Reify works. I supervise.",
+  "Born to nap. Built to blink.",
+  "Boop tax, one cookie.",
 ];
 const TINTS = ["#3b5bff", "#179c52", "#e0307f"];
 const KEY_MS = 38;
-const HOLD_MS = 1500;
+const HOLD_MS = 2400;
 
 /* ── the body, in three shapes ──────────────────────────────
    The eyes are worked out on a sphere whatever the body is, so

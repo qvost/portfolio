@@ -35,6 +35,7 @@ import { ContactPanel } from "./contact-panel";
 import { usePointerTilt } from "./use-pointer-tilt";
 import { EyeTracker } from "../eye-tracker/EyeTracker";
 import { GitHubContributions } from "../github-contributions/GitHubContributions";
+import { SiteNavigation } from "../../../src/SiteNavigation";
 
 export type { ColouristProject, ColouristSite } from "./data";
 
@@ -1054,6 +1055,9 @@ function HomeScreen({
   isPlayerMode: boolean;
   isActive: boolean;
 }) {
+  const title = site.homeTitle ?? `${site.name}, a ${site.role} ${site.titleSuffix}`;
+  const roleIndex = site.role ? title.indexOf(site.role) : -1;
+
   return (
     <motion.section
       className="cr-home"
@@ -1071,12 +1075,14 @@ function HomeScreen({
         }}
       >
         <h1 className="cr-home-title">
-          {site.homeTitle ?? <>
-            {site.name}, a <ColourTitle>{site.role}</ColourTitle> {site.titleSuffix}
+          {roleIndex < 0 ? title : <>
+            {title.slice(0, roleIndex)}
+            <ColourTitle>{site.role}</ColourTitle>
+            {title.slice(roleIndex + site.role.length)}
           </>}
         </h1>
         <p className="cr-home-sub">{site.subTitle}</p>
-        <a className="q-work-index-link" href="/work/">Browse projects </a>
+        <SiteNavigation />
       </div>
     </motion.section>
   );

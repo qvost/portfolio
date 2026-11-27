@@ -175,3 +175,21 @@ activity while visible, with cancellation on departure and a manual refresh.
 
 Screenshots: `github-landing-theme-desktop.png`, `github-landing-theme-narrow.png`,
 `github-reactive-cat.png`, and `github-white-zoom-out.png` in `artifacts/`.
+
+## November 28 project refresh
+
+- Added Hana One and Lab Notes after reading their current GitHub READMEs. The full archive and P project browser contain twelve projects, including Hana One. The selected-projects engraving contains eleven projects, with Reify first and Hana One excluded.
+- Both original SVG covers are available in the full work archive. The selected project grid includes Lab Notes.
+- The selected-projects engraving draws the selected petal and displays exactly one description. Repeated selection changes retarget the outlines during motion.
+- On the production page, native arrow keys change projects, and Tab reaches the selected project's live link. The page contains no scripts.
+- Reduced motion works at startup and when enabled while the page is open. Selection remains usable, the trace has a zero-second transition, and no animation remains running.
+- Inspected desktop, 393px mobile emulation, and 320px layouts in Chromium. The narrow engraving has no clipped labels or horizontal overflow.
+- The landing page's content and styles have been restored to their state before the project refresh. The recent-project strip and its styles have been removed.
+- The timezone dot is black. The heading's developer color still follows the pointer.
+- Hana One, Sanofi, and Lab Notes URLs returned HTTP 200. TypeScript, the production build, and `git diff --check` pass.
+
+`artifacts/restored-landing-desktop.png` records the restored landing layout.
+`artifacts/restored-selection-reify.png` records Reify as the default selection.
+The earlier `refresh-` screenshots and runtime JSON files record the initial
+animation pass. Mobile checks used Chromium device emulation. Physical devices
+and other browser engines were not checked.

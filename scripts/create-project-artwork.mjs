@@ -180,7 +180,47 @@ function sanofi() {
     path('M171 630h61m-31-31v62M670 379h52m-26-26v52', C.green, 2);
 }
 
+function hanaOne() {
+  const flower = sequence(5, index => group('<path d="M0 0C-19-10-25-33-13-43L0-38L13-43C25-33 19-10 0 0Z" fill="#788663"/>', `rotate(${index * 72})`));
+  const grille = sequence(42, index => {
+    const row = Math.floor(index / 7);
+    const column = index % 7;
+    return `<use href="#hana-grille-flower" transform="translate(${324 + column * 42} ${448 + row * 40}) scale(.29)"/>`;
+  });
+  return `<defs><g id="hana-grille-flower">${flower}</g></defs>` +
+    circle(450, 565, 265, '#e0e2d5', 'none') +
+    '<ellipse cx="450" cy="797" rx="195" ry="25" fill="#c7cfbb" opacity=".6"/>' +
+    '<path d="M266 371C266 309 634 309 634 371V702C634 807 266 807 266 702Z" fill="#f6f5ef" stroke="#a8b197" stroke-width="2"/>' +
+    '<path d="M591 380C614 375 627 369 634 361V702C634 739 614 757 590 768Z" fill="#e2e5d8"/>' +
+    '<ellipse cx="450" cy="365" rx="184" ry="55" fill="#e8ebdf" stroke="#a8b197" stroke-width="2"/>' +
+    '<ellipse cx="450" cy="365" rx="150" ry="35" fill="none" stroke="#bbc2b0" stroke-width="1"/>' +
+    circle(450, 365, 11, C.green, 'none') + grille +
+    path('M397 718h106', C.line, 2) + circle(450, 745, 3, C.green, 'none') +
+    group(flower.replaceAll('#788663', '#b9878e'), 'translate(666 329) rotate(20) scale(.9)') +
+    group(flower.replaceAll('#788663', '#b9878e'), 'translate(218 697) rotate(-16) scale(.55)') +
+    path('M702 451q50 98 0 196M729 431q68 118 0 236', C.green, 2);
+}
+
+function labNotes() {
+  const page = rect(0, 0, 439, 483, C.white, 8) +
+    path('M62 0v483', '#bdc5b0', 2) +
+    sequence(10, index => path(`M83 ${77 + index * 36}H407`, '#d6dbcd', 1.3)) +
+    sequence(9, index => circle(29, 46 + index * 48, 6, '#d5dccb', 'none') + path(`M29 ${46 + index * 48}c-47-15-47 26-5 19`, C.green, 3)) +
+    text('strata-core', 84, 57, 24, C.ink) +
+    sequence(4, index => rect(93 + index * 75, 124, 54, 50, index === 2 ? C.pale : C.white, 4) +
+      (index < 3 ? path(`M${148 + index * 75} 149h20m-6-6 6 6-6 6`, C.green, 2) : '')) +
+    text('head', 93, 207, 16) + text('next', 318, 207, 16) +
+    path('M113 335 183 264 267 322 360 250M183 264l29 111 55-53', C.green, 2.5) +
+    [[113, 335], [183, 264], [267, 322], [360, 250], [212, 375]].map(([x, y]) => circle(x, y, 6, C.green, C.white, 2)).join('') +
+    text('layout / memory / queues', 84, 447, 17);
+  return circle(450, 572, 268, '#dce2d2', 'none') +
+    group(rect(12, 14, 451, 495, C.green, 11, C.green) + rect(8, 7, 445, 490, '#d9dfd0', 8) + page, 'translate(225 307) rotate(-8 220 242)') +
+    group(rect(0, 0, 25, 357, '#879572', 4, C.green) + path('M5 0v357', '#c6cfb6', 2) + '<path d="m0 357 12.5 48L25 357Z" fill="#d8cdb2"/>' + '<path d="m8 388 4.5 17 4.5-17Z" fill="#242923"/>', 'translate(734 408) rotate(13)');
+}
+
 const projects = [
+  { slug: 'hana-one', name: 'Hana One', subtitle: 'Sound & interaction', stack: 'TypeScript / Web Audio / Sakuga', ground: '#eeece4', drawing: hanaOne(), description: 'A ceramic speaker with a flower-patterned grille, loose sakura petals, and two sound waves.' },
+  { slug: 'lab-notes', name: 'Lab Notes', subtitle: 'Systems research notebook', stack: 'Rust / C / Linux', ground: '#e8e9df', drawing: labNotes(), description: 'A spiral engineering notebook contains a linked queue and a search graph, beside a green pencil.' },
   { slug: 'statis', name: 'Statis', subtitle: 'Deterministic execution', stack: 'Rust / Linux', ground: '#e9e7df', drawing: statis(), description: 'Three identical execution traces with matching checkpoints, connected by a replay loop.' },
   { slug: 'strata', name: 'Strata', subtitle: 'Vector search', stack: 'C++ / Python', ground: '#e4e8df', drawing: strata(), description: 'A search path travels through nodes across three layered vector planes.' },
   { slug: 'reify', name: 'Reify', subtitle: 'Infrastructure for agents', stack: 'Rust / MCP', ground: '#eeede8', drawing: reify(), description: 'Four website data inputs converge on a compiler and emerge as three callable tools.' },

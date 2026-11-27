@@ -15,9 +15,10 @@
 * { box-sizing: border-box; }
 html, body, #root { width: 100%; height: 100%; margin: 0; }
 body { overflow: hidden; }
-.qvost-portfolio .q-work-index-link { color: var(--q-quiet); font-size: 12px; text-decoration: none; border-bottom: 1px solid #ddd; padding: 4px 0; }
-.qvost-portfolio .q-work-index-link:hover { color: var(--q-ink); border-color: currentColor; }
-.qvost-portfolio .q-work-index-link:focus-visible { outline: 2px solid var(--q-ink); outline-offset: 6px; }
+.qvost-portfolio .site-navigation { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px 20px; max-width: 100%; }
+.qvost-portfolio .site-navigation a { color: var(--q-quiet); font-size: 12px; text-decoration: none; border-bottom: 1px solid #ddd; padding: 4px 0; }
+.qvost-portfolio .site-navigation a:hover { color: var(--q-ink); border-color: currentColor; }
+.qvost-portfolio .site-navigation a:focus-visible { outline: 2px solid var(--q-ink); outline-offset: 6px; }
 #root { height: 100svh; height: 100dvh; }
 noscript main { padding: 40px; max-width: 700px; }
 
@@ -97,7 +98,7 @@ noscript main { padding: 40px; max-width: 700px; }
 .qvost-portfolio .q-location { position: absolute; top: 30px; right: 32px; display: flex; gap: 12px; align-items: center; }
 .qvost-portfolio .q-location span, .qvost-portfolio .q-location time { font-size: 11px; line-height: 16px; }
 .qvost-portfolio .q-location .cr-tz { font-size: 11px; line-height: 16px; }
-.qvost-portfolio .q-location-dot { width: 5px; height: 5px; border-radius: 100%; background: var(--pointer-colour); }
+.qvost-portfolio .q-location-dot { width: 5px; height: 5px; border-radius: 100%; background: #000; }
 .qvost-portfolio .q-identity { position: absolute; top: 30px; left: 32px; font-size: 11px; line-height: 16px; }
 .qvost-portfolio .q-bottom-left, .qvost-portfolio .q-bottom-right { position: absolute; bottom: 26px; font-size: 11px; line-height: 18px; }
 .qvost-portfolio .q-bottom-left { left: 32px; }

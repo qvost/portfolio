@@ -9,7 +9,7 @@ npm run dev
 ```
 
 Development uses port 5174. `npm run build` checks TypeScript, builds the app,
-and renders the home and projects pages to HTML in `dist/`.
+and renders the home, contact, lab, selected projects, and work pages to HTML in `dist/`.
 `npm run preview` serves the production build on port 4174.
 
 ## Search and sharing
@@ -17,13 +17,19 @@ and renders the home and projects pages to HTML in `dist/`.
 The canonical site is `https://qvost.vercel.app/`. The build produces:
 
 - A rendered home page that React hydrates for the interactive portfolio.
+- `/contact/`, with the email address and social profiles.
+- `/lab/`, with Shaligram Labs and Reify's three discovery paths.
+- `/project/`, a selected-projects overview linking to the full work archive.
 - `/work/`, a projects page with descriptions and ordinary links. It works without JavaScript.
-- `/robots.txt` and `/sitemap.xml`, with the two canonical page URLs.
+- `/robots.txt` and `/sitemap.xml`, with all five canonical page URLs.
 - WebSite and Person structured data, page titles, descriptions, and social previews.
 
 `index.html` owns the home metadata and existing Search Console verification tag.
-`scripts/prerender.mjs` generates the HTML and crawl files. `src/WorkIndex.tsx`
-uses the same project data as the interactive page and the no-JavaScript fallback.
+`scripts/prerender.mjs` generates the HTML and crawl files. Each standalone page
+has its own title, description, canonical URL, and sharing metadata, and works
+without JavaScript. The development app also supports these paths with or without
+a trailing slash. `src/WorkIndex.tsx` and `src/ProjectOverview.tsx` use the same
+project data as the interactive page and the no-JavaScript fallback.
 `public/social-card.svg` is the source for the 1200 by 630 PNG sharing image.
 
 If the production domain changes, set `SITE_URL` in the build environment:
@@ -33,22 +39,25 @@ SITE_URL=https://your-domain.example npm run build
 ```
 
 After deployment, confirm ownership in Google Search Console, submit
-`https://qvost.vercel.app/sitemap.xml`, and inspect the home and projects URLs.
+`https://qvost.vercel.app/sitemap.xml`, and inspect the five page URLs.
 The existing verification tag is preserved; its presence does not confirm that
 verification or indexing has completed. See `docs/seo-audit.md` for the findings,
 Google documentation, and remaining launch steps.
 
 ## Edit the content
 
-- `src/portfolio-data.ts` contains the identity, contact links, and ten projects.
+- `src/portfolio-data.ts` contains the identity, contact links, twelve projects for the P browser and full archive, and the selected collection. Reify leads the selection. Hana One is excluded from the selected-projects page.
 - `src/shaligram-lab.ts` contains lab links and the three Reify discovery paths.
+- `src/ContactPage.tsx`, `src/LabPage.tsx`, and `src/ProjectOverview.tsx` contain the standalone pages.
+- `src/SiteNavigation.tsx` shares page links between the home and standalone pages.
 - `src/global.css` contains the visual overrides and responsive lab layout.
 - `components/ui/colourist-reel-page/lab-continuation.tsx` owns the peeking panel, reveal, internal scrolling, and interactive compiler diagram.
 - `components/ui/colourist-reel-page/ink-cursor.tsx` owns the ink drop and precise pointer tip.
 - `components/ui/portfolio-footer.tsx` and its stylesheet share the contact footer between GitHub and `/work/`.
 - `components/ui/ascii-logo.tsx` samples the lab mark into interactive ASCII glyphs. `reactive-lab-mark.tsx` sets its palette and behavior.
 - `components/ui/github-contributions/` owns the third chapter, live calendar data, and its scoped styles.
-- `public/projects/` contains ten original illustrations matching the portfolio's paper and green theme.
+- `src/ProjectConstellation.tsx` draws one petal per selected project. Native radio controls select a description and draw its outline, including on the static page without JavaScript.
+- `public/projects/` contains twelve original illustrations matching the portfolio's paper and green theme.
 - `public/assets/shaligram/mark.svg` is the user's lab mark, sourced from the live lab site.
 - `public/assets/shaligram/mark-ascii.svg` has the same paths filled white so the ASCII sampler can read their brightness. `npm run assets:sync` regenerates it.
 
